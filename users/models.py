@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 class Users(AbstractUser):
     top_cps = models.FloatField(default=0)
     top_cps_game_id = models.OneToOneField("Games", on_delete=models.SET_NULL, null=True, blank=True)
-    iso2_code = models.CharField(max_length=2, blank=True, null=True)
+    flag_emoji = models.CharField(max_length=2, default="🌐")
     bio = models.TextField(blank=True)
     avatar = models.ImageField(upload_to="profile_images/", blank=True, null=True)
     banner = models.ImageField(upload_to="profile_images/", blank=True, null=True)
