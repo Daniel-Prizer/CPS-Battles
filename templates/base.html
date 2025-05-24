@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}My Site{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'homepage/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <header>
+        <div class="header_flexbox">
+        <button type="button" id="home_button" class="header_button">CPS BATTLES</button>
+        <button type="button" id="leaderboards_button" class="header_button">LEADERBOARDS</button>
+        <button type="button" id="login_button" class="header_button">LOGIN</button>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div id="homepage_flexbox">
+        <div id="homepage_left">
+            <p class="title">Test your speed!</p>
+            <p class="small">clicks per second: 0.</p>
+            <button class="cps_button">Click me!</button>
+            <p class="small">Your record: 0</p>
+            <p class="small" id="login_text_homepage">Please log in to save your record!</p>
+        </div>
+        <div id="homepage_right">
+            <button id="friends_button"><b>Play with friends</b></button>
+        </div>
+    </div>
+{% endblock %}
