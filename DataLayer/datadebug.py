@@ -21,4 +21,4 @@ BASE_DIR = Path(__file__).resolve().parent
 api = DataLayerAPI()
 
 
-print(api.get_all_users())
+print(api.get_games_for_user_id(1))

@@ -7,9 +7,16 @@
     <div id="homepage_flexbox">
         <div id="homepage_left">
             <p class="title">Test your speed!</p>
-            <p class="small">clicks per second: 0.</p>
+            <p id="cps" class="small">clicks per second: 0</p>
             <button class="cps_button">Click me!</button>
-            <p class="small">Your record: 0</p>
+
+            {% if user.is_authenticated %}
+                <p class="small">Your record: <span id="top_cps">{{user.top_cps}}</span></p>
+            {% else %}
+                <p class="small" >Your record: <span id="top_cps">0.0</span></p>
+            {% endif %}
+
+            
 
     {% if user.is_authenticated %}
     {% else %}

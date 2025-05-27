@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 </head>
-<body>
+<body data-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
     <header>
         <div class="header_flexbox">
         <button type="button" id="home_button" class="header_button">CPS BATTLES</button>
@@ -29,6 +29,14 @@
 
 
     {% block scripts %}{% endblock %}
-    <script src="{% static 'js/base.js' %}"></script>
+    
+
+    {% if user.is_authenticated %}
+        <script src="{% static 'js/base_logged_in.js' %}"></script>
+    {% else %}
+        <script src="{% static 'js/base_logged_out.js' %}"></script>
+    {% endif %}
+
+
 </body>
 </html>

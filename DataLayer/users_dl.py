@@ -69,13 +69,20 @@ class games_dl:
         player_two: int,
         player_two_cps: float,
         mode: str,) -> dict:
-        game = Games.objects.create(
-            player_one = Users.objects.get(id=player_one),
-            player_one_cps = player_one_cps,
-            player_two = Users.objects.get(id=player_two),
-            player_two_cps = player_two_cps,
-            mode = mode
-        )
+        if player_two:
+            game = Games.objects.create(
+                player_one = Users.objects.get(id=player_one),
+                player_one_cps = player_one_cps,
+                player_two = Users.objects.get(id=player_two),
+                player_two_cps = player_two_cps,
+                mode = mode
+            )
+        else:
+            game = Games.objects.create(
+                player_one = Users.objects.get(id=player_one),
+                player_one_cps = player_one_cps,
+                mode = mode
+            )
         return model_to_dict(game)
 
 
