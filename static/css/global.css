@@ -18,7 +18,25 @@ a {
     text-decoration: none;
 }
 
-
+.title {
+    font-size: 3rem;
+    display: inline;
+}
+.medium {
+    font-size: 1.9rem;
+}
+.small {
+    font-size: 1.2rem;
+}
+.main-box-background {
+    max-width: fit-content;
+    max-height: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 20%;
+    background-color: #34495E;
+}
+/* --------------------------- HEADER --------------------------- */
 .header_flexbox {
   display: flex;
   justify-content: space-between;
@@ -44,15 +62,8 @@ a {
     color: black;
 }
 
-.title {
-    font-size: 3rem;
-    display: inline;
-}
 
-.small {
-    font-size: 1.2rem;
-}
-
+/* --------------------------- HOMEPAGE --------------------------- */
 .cps_button {
     border: none;
     color: black;
@@ -136,4 +147,38 @@ a {
         height: 100%
     }
     
+}
+
+
+/* --------------------------- LOGIN --------------------------- */
+#login-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    padding: 5%;
+    padding-top: 0%;
+    padding-bottom: 1%;
+    margin-top: 5%;
+}
+
+#login-text {
+    padding-bottom: 20%;
+    margin-bottom: 3%;
+}
+
+.confirm-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-top: 20%;
+}
+
+.helptext {
+    padding-block: 1px;
+    padding-inline: 2px;
+    font-size: 0.8rem;
+    font-style: italic;
 }

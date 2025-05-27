@@ -15,8 +15,8 @@ class DataLayerAPI:
     def register_user(
         self,
         username: str,
-        bio: str,
         password: str,
+        bio: str="",
         flag_emoji: str="🌐",
     ) -> dict:
         """Registers a new user and returns the created user as a dictionary."""

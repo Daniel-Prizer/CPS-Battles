@@ -1,0 +1,41 @@
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block content %}
+
+
+
+{% if user.is_authenticated %}
+    <div id="login-box" class="main-box-background">
+        <p>You are already logged in.</p>
+    </div>
+{% else %}
+    <div id="login-box" class="main-box-background">
+        <h1 id="login-text" class="title" style="padding-bottom: 2%;">Register</h1>
+        <section class="auth-box auth-register">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="confirm-button" style="padding-top: 5%;">
+
+
+
+                <input class="header_button" type="submit" value="Confirm"/>
+                </div>
+            </form>
+        </section>
+    </div>
+{% endif %}
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{% static 'js/register.js' %}"></script>
+{% endblock %}

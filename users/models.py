@@ -6,7 +6,7 @@ class Users(AbstractUser):
     top_cps = models.FloatField(default=0)
     top_cps_game_id = models.OneToOneField("Games", on_delete=models.SET_NULL, null=True, blank=True)
     flag_emoji = models.CharField(max_length=2, default="🌐")
-    bio = models.TextField(blank=True)
+    bio = models.TextField(blank=True, null=True)
     avatar = models.ImageField(upload_to="profile_images/", blank=True, null=True)
     banner = models.ImageField(upload_to="profile_images/", blank=True, null=True)
     first_name = None
