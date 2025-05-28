@@ -58,15 +58,25 @@ class DataLayerAPI:
         player_one_cps: float,
         player_two: int,
         player_two_cps: float,
-        mode: str,) -> dict:
+        mode: str,
+        active: bool) -> dict:
         """Registers a new game and returns the created game as a dictionary."""
         return self.games_dl.register_game(
             player_one,
             player_one_cps,
             player_two,
             player_two_cps,
-            mode
+            mode,
+            active
         )
+    
+    def edit_game(self, game_id: int, field: str, replacement: Union[int, str, bool]) -> dict:
+        """Updates a specific field of the user with the given ID.
+        
+        Editable fields: [player_one_cps, player_two, player_two_cps, mode, active]
+        Returns the updated user as a dictionary.
+        """
+        return self.games_dl.edit_game(game_id, field, replacement)
 
     def delete_game(self, game_id: int) -> dict:
         """Deletes the game with the given ID and returns the deleted game as a dictionary."""

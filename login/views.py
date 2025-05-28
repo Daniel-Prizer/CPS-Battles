@@ -10,7 +10,6 @@ from django.contrib import messages
 
 
 def country_code_to_flag(country_code):
-    # Must be uppercase 2-letter ISO country code
     if not country_code or len(country_code) != 2:
         return ""
     return chr(ord(country_code[0].upper()) + 127397) + chr(ord(country_code[1].upper()) + 127397)

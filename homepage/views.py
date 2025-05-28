@@ -10,7 +10,6 @@ def homepage(request):
         data = json.loads(request.body)
         top_cps = data.get("top_cps")
         username = request.user.username
-        print(username,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
         user_id = api.get_user_by_username(username)["id"]
 
         game = api.register_game(

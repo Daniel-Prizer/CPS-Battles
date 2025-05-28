@@ -24,8 +24,13 @@
     {% endif %}
 
         </div>
+
         <div id="homepage_right">
-            <button id="friends_button"><b>Play with friends</b></button>
+            <form method="post" action="{% url 'create_game' %}">
+                {% csrf_token %}
+            <button type = submit id="friends_button"><b>Play with friends</b></button>
+            </form>
+
         </div>
     </div>
 {% endblock %}
