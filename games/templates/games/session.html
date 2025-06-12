@@ -1,14 +1,66 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}CPS 1v1{% endblock %}
 
 {% block content %}
-<!-- add html here -->
+
+<div id="pregame-box" class="main-box-background">
+    <p id="sharelink-text">Please share this link with your friend so that they may join your lobby.</p>
+    <button class="header_button" id="copy_link_button">Copy 🔗</button>
+    <input type="text" id="game_link" name="game_link" value="..." readonly>
+    <div id="game-info-flexbox">
+        <div id="gamemode-value-div">
+        <label for="gamemode" class="small">Gamemode<br></label>
+        <select name="gamemode" id="gamemode-select">
+            <option value="First to [value] clicks">First to [value] clicks</option>
+            <option value="Best top speed in [value]s">Best top speed in [value]s</option>
+        </select>
+        <br>
+        <label for="value" class="small">Value<br></label>
+        <select name="value" id="value-select">
+            <option value="50" class="first_to_values">50</option>
+            <option value="75" class="first_to_values">75</option>
+            <option value="100" class="first_to_values">100</option>
+            <option value="125" class="first_to_values">125</option>
+            <option value="150" class="first_to_values">150</option>
+
+            <option value="10" class="best_top_values">10</option>
+            <option value="15" class="best_top_values">15</option>
+            <option value="20" class="best_top_values">20</option>
+            <option value="25" class="best_top_values">25</option>
+            <option value="30" class="best_top_values">30</option>
+        </select>               
+        </div>
+
+        <div id="gamemode-info-div" class="secondary-box-background">
+            <div class="little_box_title">
+                <p id="tutorial_title">First to 100 clicks</p>
+            </div>
+            <p id="tutorial_text">The first player to click 100 times, wins the game!</p>
+        </div>
+
+        <div id="joined-players-div" class="secondary-box-background">
+            <div class="little_box_title">
+                <p>Joined Players</p>
+            </div>
+            <p id="player1_text">1. Loading...</p>
+            <p id="player2_text">2. Waiting for player...</p>
+        </div>
+
+    </div>
+    <div id="start_game_button_div">
+        <button class="header_button" id="start_game" disabled>Start</button>
+    </div>
+</div>
 {% endblock %}
 
 
 
 {% block scripts %}
+<script>
+    const game_id = "{{ game_id }}";
+</script>
+
 <script src="{% static 'js/session.js' %}"></script>
 {% endblock %}

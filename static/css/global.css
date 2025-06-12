@@ -36,6 +36,11 @@ a {
     border-radius: 20%;
     background-color: #34495E;
 }
+.emoji {
+    height: 1em;
+    width: 1em;
+    vertical-align: -0.1em;
+}
 /* --------------------------- HEADER --------------------------- */
 .header_flexbox {
   display: flex;
@@ -60,6 +65,11 @@ a {
 .header_button:active {
     background-color: #b4bfc9;
     color: black;
+}
+
+.header_button:disabled {
+    background-color: #404040;
+    color: rgb(154, 154, 154);
 }
 
 
@@ -181,4 +191,104 @@ a {
     padding-inline: 2px;
     font-size: 0.8rem;
     font-style: italic;
+}
+
+
+
+/* --------------------------- SESSION --------------------------- */
+#game-info-flexbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 50px;
+}
+
+#sharelink-text {
+    font-size: 1.5rem;
+    padding-top: 2%;
+    margin-bottom: 0%;
+}
+
+#pregame-box {
+    position: relative;
+    padding-bottom: 2%;
+    padding-left: 2%;
+    padding-right: 2%;
+    margin-top: 2%;
+    border-radius: 5%/10%;
+}
+
+#copy_link_button {
+    margin-top: 0%;
+    font-size: 1.2rem;
+    z-index: 1;
+}
+
+#start_game {
+    font-size: 1.2rem;
+}
+
+#start_game_button_div {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5%;
+}
+
+#game_link {
+    margin-left: 3px;
+    font-size: 1rem;
+    z-index: -1;
+    width: 65%;
+    padding-top: 1.2%;
+    padding-bottom: 1.1%;
+    border-radius: 2%/30%;
+    background-color: black;
+    color: white;
+    opacity: 60%;
+    border: none;
+}
+
+.secondary-box-background {
+    max-width: fit-content;
+    max-height: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2%;
+    padding-right: 2%;
+    border-radius: 5%/20%;
+    background-color: #3F5B76;
+}
+
+#joined-players-div {
+    border-radius: 15%/15%;
+}
+
+.little_box_title {
+    display: flex;
+    justify-content: center;
+    margin: 0%
+}
+
+
+
+/* --------------------------- GAMEPLAY --------------------------- */
+#player_info_flexbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.player_progress_div_bg {
+    width: 8rem;
+    height: 18rem;
+    background-color: #697DBE;
+}
+
+.player_progress_div {
+    width: 100%;
+    height: 100%; /* 90% = player progress is 10% */
+    background-color: #D9D9D9;
 }

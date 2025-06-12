@@ -73,7 +73,17 @@ class DataLayerAPI:
     def edit_game(self, game_id: int, field: str, replacement: Union[int, str, bool]) -> dict:
         """Updates a specific field of the user with the given ID.
         
-        Editable fields: [player_one_cps, player_two, player_two_cps, mode, active]
+        Editable fields: 
+        [
+        player_one_clicks, 
+        player_one_cps, 
+        player_two, 
+        player_two_clicks, 
+        player_two_cps, 
+        mode, 
+        active, 
+        started,
+        ]
         Returns the updated user as a dictionary.
         """
         return self.games_dl.edit_game(game_id, field, replacement)
@@ -81,6 +91,10 @@ class DataLayerAPI:
     def delete_game(self, game_id: int) -> dict:
         """Deletes the game with the given ID and returns the deleted game as a dictionary."""
         return self.games_dl.delete_game(game_id)
+    
+    def get_game(self, game_id: int) -> dict:
+        """Retrieves the game with the specified ID as a dictionary."""
+        return self.games_dl.get_game(game_id)
 
     def get_games_for_user_id(self, user_id: int) -> list:
         """Retrieves a list of games where the user is a participant."""

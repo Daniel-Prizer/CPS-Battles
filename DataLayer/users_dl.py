@@ -93,14 +93,29 @@ class games_dl:
 
     def edit_game(self, game_id: int, field: str, replacement: str) -> dict:
         game = Games.objects.get(game_id=game_id)
-        if field.lower() not in ["player_one_cps","player_two", "player_two_cps", "mode", "active"]:
-            raise Exception("'field' must be one of: [player_one_cps, player_two, player_two_cps, mode, active]")
+        if field.lower() not in [
+        "player_one_clicks", 
+        "player_one_cps", 
+        "player_two", 
+        "player_two_clicks", 
+        "player_two_cps", 
+        "mode", 
+        "active", 
+        "started",
+        ]:
+            raise Exception("'field' must be one of: [player_one_clicks, player_one_cps, player_two, player_two_clicks, player_two_cps, mode, active, started]")
         elif field.lower() == "player_one_cps":
             game.player_one_cps = replacement
             game.save(update_fields=["player_one_cps"])
+        elif field.lower() == "player_one_clicks":
+            game.player_one_clicks = replacement
+            game.save(update_fields=["player_one_clicks"])
         elif field.lower() == "player_two":
             game.player_two = Users.objects.get(id=replacement)
             game.save(update_fields=["player_two"])
+        elif field.lower() == "player_two_clicks":
+            game.player_two_clicks = replacement
+            game.save(update_fields=["player_two_clicks"])
         elif field.lower() == "player_two_cps":
             game.player_two_cps = replacement
             game.save(update_fields=["player_two_cps"])
@@ -110,6 +125,9 @@ class games_dl:
         elif field.lower() == "active":
             game.active = replacement
             game.save(update_fields=["active"])
+        elif field.lower() == "started":
+            game.started = replacement
+            game.save(update_fields=["started"])
         model_dict = model_to_dict(game)
         model_dict["game_id"] = game.game_id
         return model_dict
@@ -136,3 +154,7 @@ class games_dl:
             model_dict["game_id"] = game.game_id
             lis.append(model_dict)
         return lis
+    
+    def get_game(self, game_id: int) -> dict:
+        game = Games.objects.get(game_id=game_id)
+        return model_to_dict(game)

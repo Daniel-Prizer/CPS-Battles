@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('homepage.urls')),
     path('', include('games.urls')),
+    path('', include('users.urls')),
     path('login/', include('login.urls')),
     path("register/", registerPage, name="register"),
     path("logout/", logoutUser, name="logout"),

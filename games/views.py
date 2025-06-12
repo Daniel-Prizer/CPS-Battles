@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from .models import Games
 from DataLayer.API import DataLayerAPI
+from django.http import JsonResponse
+import uuid
+import json
+
+api = DataLayerAPI()
 
 def create_game(request):
 
-    api = DataLayerAPI()
     if not request.user.is_authenticated:
         return redirect('/login')
     
@@ -21,14 +25,36 @@ def create_game(request):
     return redirect('join_game', game_id=game["game_id"])
 
 
+def render_game(request, game_id):
+    return render(request, 'games/gameplay.html', {"game_id": game_id})
+
+
 def join_game(request, game_id):
-    api = DataLayerAPI()
+
     game = get_object_or_404(Games, game_id=game_id)
 
-    if game.player_two and game.player_one:
+    if game.player_two and game.player_one and game.player_two != request.user and game.player_one != request.user:
         return render(request, "games/full.html")  # Show an error template or redirect
 
     elif not game.player_two and game.player_one != request.user:
         api.edit_game(game.game_id,"player_two",request.user.id)
+    
+    elif game.player_two and game.player_one and game.started:
+        return render(request, 'games/gameplay.html', {"game_id": game_id})
 
-    return render(request, 'games/session.html', {"game": game_id})
+    return render(request, 'games/session.html', {"game_id": game_id})
+
+def get_game(request, game_id):
+    game = api.get_game(game_id)
+    return JsonResponse(game)
+
+
+def edit_game(request, game_id):
+    # expects edit field to be one of the ones listed under api.py
+    if request.method == "POST":
+        data = json.loads(request.body)
+        edit_field = data.get("edit_field")
+        edit_replacement = data.get("edit_replacement")
+        return JsonResponse(api.edit_game(game_id, edit_field, edit_replacement))
+    else:
+        return JsonResponse({"error": "Only POST allowed"}, status=405)

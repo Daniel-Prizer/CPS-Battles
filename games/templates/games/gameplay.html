@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CPS 1v1{% endblock %}
+
+{% block content %}
+
+    <div id="homepage_flexbox">
+        <div id="homepage_left">
+            <p class="title">Clicks remaining: <span id="clicks_remaining">100</span></p>
+            <p id="cps" class="small">clicks per second: 0</p>
+            <button class="cps_button">Click me!</button>
+
+        </div>
+
+        <div id="homepage_right">
+            <p class="medium">Time remaining: <span id="time_remaining">20</span>s</p>
+            <div id="player_info_flexbox">
+                <div id ="player_one_info">
+                    <p id="player_one_clicks" class="small">0</p>
+                    <div id="player_one_progress_div" class="player_progress_div_bg"><div class="player_progress_div"></div></div>
+                    <p id="player_one_name" class="small">Player 1</p>
+                </div>
+
+                <div id ="player_two_info">
+                    <p id="player_two_clicks" class="small">0</p>
+                    <div id="player_two_progress_div" class="player_progress_div_bg"><div class="player_progress_div"></div></div>
+                    <p id="player_two_name" class="small">Player 2</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    const game_id = "{{ game_id }}";
+</script>
+
+<script src="{% static 'js/gameplay.js' %}"></script>
+{% endblock %}

@@ -5,7 +5,8 @@
     <title>{% block title %}CPS Battles{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
+    <script src="{% static 'js/twemoji.min.js' %}"></script>
+    
 </head>
 <body data-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
     <header>
@@ -36,6 +37,7 @@
     {% else %}
         <script src="{% static 'js/base_logged_out.js' %}"></script>
     {% endif %}
+   
 
 
 </body>
