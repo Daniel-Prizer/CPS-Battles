@@ -20,7 +20,6 @@ def create_game(request):
         player_two=None,
         player_two_cps=None,
         mode="unknown",
-        active=True
         )
     return redirect('join_game', game_id=game["game_id"])
 
@@ -55,6 +54,8 @@ def edit_game(request, game_id):
         data = json.loads(request.body)
         edit_field = data.get("edit_field")
         edit_replacement = data.get("edit_replacement")
+        if edit_replacement == "current_user":
+            edit_replacement = request.user.id
         return JsonResponse(api.edit_game(game_id, edit_field, edit_replacement))
     else:
         return JsonResponse({"error": "Only POST allowed"}, status=405)

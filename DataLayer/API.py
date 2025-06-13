@@ -58,8 +58,7 @@ class DataLayerAPI:
         player_one_cps: float,
         player_two: int,
         player_two_cps: float,
-        mode: str,
-        active: bool) -> dict:
+        mode: str,) -> dict:
         """Registers a new game and returns the created game as a dictionary."""
         return self.games_dl.register_game(
             player_one,
@@ -67,7 +66,6 @@ class DataLayerAPI:
             player_two,
             player_two_cps,
             mode,
-            active
         )
     
     def edit_game(self, game_id: int, field: str, replacement: Union[int, str, bool]) -> dict:
@@ -79,9 +77,9 @@ class DataLayerAPI:
         player_one_cps, 
         player_two, 
         player_two_clicks, 
-        player_two_cps, 
+        player_two_cps,
+        winning_player, 
         mode, 
-        active, 
         started,
         ]
         Returns the updated user as a dictionary.

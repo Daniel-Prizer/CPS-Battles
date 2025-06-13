@@ -1,5 +1,6 @@
 1. Dont allow users to see passwords in console in a game session.
-
+2. Linter for js, css, html
+3. DLAPI move games to games_dl
 
 
 

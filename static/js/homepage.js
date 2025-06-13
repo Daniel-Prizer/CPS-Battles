@@ -3,7 +3,7 @@ let counter = 0;
 let firstClick;
 let currentClick;
 let cps;
-let top_cps
+let top_cps;
 
 
 function getCookie(name) {
@@ -27,10 +27,8 @@ function setRecord(cps) {
         top_cps = Math.round(cps*100)/100
         document.getElementById("top_cps").innerHTML = top_cps
 
-        /* Check is user is logged in */
-        console.log(isLoggedIn)
+        /* Check if user is logged in */
         if (isLoggedIn) {
-            console.log("here")
             fetch("/", {
             method: "POST",
             headers: {
@@ -49,7 +47,6 @@ function setRecord(cps) {
 }
 
 function click() {
-    console.log("glick")
     counter++
     if (counter == 1){
         firstClick = new Date().getTime();

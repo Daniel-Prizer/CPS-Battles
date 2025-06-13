@@ -27,5 +27,7 @@ api = DataLayerAPI()
 print(api.get_games_for_user_id(1)) """
 
 import uuid
-print(api.edit_game(uuid.UUID('a9b7da35-36b9-4245-9e7b-37e68789e179'),"started",False))
-print(api.get_game(uuid.UUID('a9b7da35-36b9-4245-9e7b-37e68789e179')))
+#print(api.edit_game(uuid.UUID('6371dc39-c472-44bc-a1d5-31313063bf63'),"started",False))
+""" print(api.edit_game(uuid.UUID('6371dc39-c472-44bc-a1d5-31313063bf63'),"winning_player",None))
+print(api.get_game(uuid.UUID('6371dc39-c472-44bc-a1d5-31313063bf63'))) """
+print(api.get_all_users())

@@ -25,6 +25,7 @@ class users_dl:
     def edit_user(self, user_id: int, field: str, replacement: str) -> dict:
         user = Users.objects.get(id=user_id)
         if field.lower() not in ["bio", "avatar", "banner", "top_cps","top_cps_game_id"]:
+            print(field)
             raise Exception("'field' must be one of: [bio, avatar, banner, top_cps, top_cps_game_id]")
         elif field.lower() == "bio":
             user.bio = replacement
@@ -68,8 +69,7 @@ class games_dl:
         player_one_cps: float,
         player_two: int,
         player_two_cps: float,
-        mode: str,
-        active: bool) -> dict:
+        mode: str,) -> dict:
         if player_two:
             game = Games.objects.create(
                 player_one = Users.objects.get(id=player_one),
@@ -77,14 +77,12 @@ class games_dl:
                 player_two = Users.objects.get(id=player_two),
                 player_two_cps = player_two_cps,
                 mode = mode,
-                active = active
             )
         else:
             game = Games.objects.create(
                 player_one = Users.objects.get(id=player_one),
                 player_one_cps = player_one_cps,
                 mode = mode,
-                active = active
             )
         model_dict = model_to_dict(game)
         model_dict["game_id"] = game.game_id
@@ -99,11 +97,12 @@ class games_dl:
         "player_two", 
         "player_two_clicks", 
         "player_two_cps", 
+        "winning_player",
         "mode", 
-        "active", 
         "started",
         ]:
-            raise Exception("'field' must be one of: [player_one_clicks, player_one_cps, player_two, player_two_clicks, player_two_cps, mode, active, started]")
+            print(field)
+            raise Exception("'field' must be one of: [player_one_clicks, player_one_cps, player_two, player_two_clicks, player_two_cps, winning_player, mode, started]")
         elif field.lower() == "player_one_cps":
             game.player_one_cps = replacement
             game.save(update_fields=["player_one_cps"])
@@ -119,12 +118,12 @@ class games_dl:
         elif field.lower() == "player_two_cps":
             game.player_two_cps = replacement
             game.save(update_fields=["player_two_cps"])
+        elif field.lower() == "winning_player":
+            game.winning_player = Users.objects.get(id=replacement)
+            game.save(update_fields=["winning_player"])
         elif field.lower() == "mode":
             game.mode = replacement
             game.save(update_fields=["mode"])
-        elif field.lower() == "active":
-            game.active = replacement
-            game.save(update_fields=["active"])
         elif field.lower() == "started":
             game.started = replacement
             game.save(update_fields=["started"])
