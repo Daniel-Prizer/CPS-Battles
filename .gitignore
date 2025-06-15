@@ -174,3 +174,11 @@ cython_debug/
 .pypirc
 
 .vscode
+
+# Node
+node_modules/
+package-lock.json
+package.json
+
+eslint.config.mjs
+node_modules/.package-lock.json

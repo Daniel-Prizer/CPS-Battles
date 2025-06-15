@@ -14,3 +14,4 @@ add pixelated text on profile page for game history, and make the game history t
 add lines between the leaderboard entries
 add a little button box around the arrow when flipping pages on leaderboard
 gamemode select text changes based on value instead of just having <value>
+add "leader: to session"

@@ -94,7 +94,6 @@ setInterval(() => {
         if (currentClick && new Date().getTime() - currentClick >= 1750) {
             counter = 0;
             firstClick = null;
-            lastClickTime = null;
             document.getElementById("cps").innerText = "clicks per second: 0";
 
 

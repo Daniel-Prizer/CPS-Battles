@@ -44,8 +44,8 @@
             <div class="little_box_title">
                 <p>Joined Players</p>
             </div>
-            <p id="player1_text">1. Loading...</p>
-            <p id="player2_text">2. Waiting for player...</p>
+            <p id="player1_text">Loading...</p>
+            <p id="player2_text">Waiting for player...</p>
         </div>
 
     </div>
@@ -60,6 +60,7 @@
 {% block scripts %}
 <script>
     const game_id = "{{ game_id }}";
+    const user_id = "{{user.id}}";
 </script>
 
 <script src="{% static 'js/session.js' %}"></script>

@@ -81,6 +81,7 @@ class DataLayerAPI:
         winning_player, 
         mode, 
         started,
+        timestamp,
         ]
         Returns the updated user as a dictionary.
         """

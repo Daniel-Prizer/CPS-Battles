@@ -12,7 +12,7 @@ class Games(models.Model):
     player_two_cps = models.FloatField(default=0, null=True)
     player_two_clicks = models.FloatField(default=0)
     winning_player = models.ForeignKey("users.Users", on_delete=models.PROTECT, null=True, related_name='games_as_winner')
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
     mode = models.CharField(max_length=150, blank=True, null=True)
     started = models.BooleanField(default=False)
 

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('id_country_code').value = data.country;
     })
     .catch(() => {
-        document.getElementById('id_country_code').value = data.country;
+        document.getElementById('id_country_code').value = undefined;
     });
 });
 

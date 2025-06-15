@@ -100,9 +100,10 @@ class games_dl:
         "winning_player",
         "mode", 
         "started",
+        "timestamp",
         ]:
             print(field)
-            raise Exception("'field' must be one of: [player_one_clicks, player_one_cps, player_two, player_two_clicks, player_two_cps, winning_player, mode, started]")
+            raise Exception("'field' must be one of: [player_one_clicks, player_one_cps, player_two, player_two_clicks, player_two_cps, winning_player, mode, started, timestamp]")
         elif field.lower() == "player_one_cps":
             game.player_one_cps = replacement
             game.save(update_fields=["player_one_cps"])
@@ -127,6 +128,9 @@ class games_dl:
         elif field.lower() == "started":
             game.started = replacement
             game.save(update_fields=["started"])
+        elif field.lower() == "timestamp":
+            game.timestamp = replacement
+            game.save(update_fields=["timestamp"])
         model_dict = model_to_dict(game)
         model_dict["game_id"] = game.game_id
         return model_dict

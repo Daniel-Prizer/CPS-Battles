@@ -3,13 +3,16 @@ let mode_type = undefined
 let mode_value = undefined
 
 let clicks_remaining = 0
-let secs_remaining = 20
+let secs_remaining = 30
 
 let counter = 0;
 let firstClick;
 let currentClick;
 let cps;
 let top_cps = 0;
+
+let start_time = undefined
+let button_unlock_timer = undefined
 
 let = game_refresh_interval = undefined
 
@@ -27,6 +30,115 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+const set_timers = () => { 
+    // update click speed every second and secs remaining
+    setInterval(() => {
+        if (secs_remaining>0) {
+            secs_remaining--
+            document.getElementById("time_remaining").textContent = secs_remaining
+        } else { // if 0 seconds remaining
+
+        }
+        if (counter > 1) {
+            cps = ((counter / (new Date().getTime()-firstClick))*1000)
+            document.getElementById("cps").innerText = "clicks per second: " + Math.round(cps*100)/100
+            setRecord(cps)
+            }
+        }, 1000);
+
+    
+    // set click speed to 0 if inactive
+    setInterval(() => {
+        if (currentClick && new Date().getTime() - currentClick >= 1750) {
+            counter = 0;
+            firstClick = null;
+            lastClickTime = null;
+            document.getElementById("cps").innerText = "clicks per second: 0";
+            }
+        }, 500);
+
+    // update game information, check if player has won and refresh co-op click counter
+    game_refresh_interval = setInterval(() => {
+        // send current info
+        // send info for player one
+        if (game_base_state.player_one == user_id) {
+            // update clicks
+            fetch(`/api/game/${game_id}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    edit_field: 'player_one_clicks',
+                    edit_replacement: mode_value-clicks_remaining
+                })
+            })
+            // update cps
+            fetch(`/api/game/${game_id}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    edit_field: 'player_one_cps',
+                    edit_replacement: top_cps
+                })
+            })
+        } // send info for player two 
+        else {
+            // update clicks
+            fetch(`/api/game/${game_id}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    edit_field: 'player_two_clicks',
+                    edit_replacement: mode_value-clicks_remaining
+                })
+            })
+            // update cps
+            fetch(`/api/game/${game_id}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    edit_field: 'player_two_cps',
+                    edit_replacement: top_cps
+                })
+            })  
+        }
+        // get recent info
+        fetch(`/api/get_game/${game_id}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (mode_type == "first to") {
+                document.getElementById("player_one_clicks").textContent = data.player_one_clicks
+                document.getElementById("player_two_clicks").textContent = data.player_two_clicks
+                let player_one_percent = (100 - ((data.player_one_clicks) / mode_value) * 100) + "%";
+                document.getElementById("player_one_progress_div").style.height = player_one_percent
+                let player_two_percent = (100 - ((data.player_two_clicks) / mode_value) * 100) + "%";
+                document.getElementById("player_two_progress_div").style.height = player_two_percent
+            } else if ( mode_type == "best top speed") {
+                document.getElementById("player_one_clicks").textContent = data.player_one_cps
+                document.getElementById("player_two_clicks").textContent = data.player_two_cps
+                let player_one_percent = (100 - ((data.player_one_cps) / 75) * 100) + "%";
+                document.getElementById("player_one_progress_div").style.height = player_one_percent
+                let player_two_percent = (100 - ((data.player_two_cps) / 75) * 100) + "%";
+                document.getElementById("player_two_progress_div").style.height = player_two_percent
+            }
+        });
+
+        check_and_set_win_state()
+    }, 500);
+}
+
 
 const check_and_set_win_state = () => {
     fetch(`/api/get_game/${game_id}/`)
@@ -138,6 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementsByClassName("cps_button")[0].onclick = function () {
         click()
     }
+    document.getElementsByClassName("cps_button")[0].disabled = true
     fetch(`/api/get_game/${game_id}/`)
     .then(response => response.json())
     .then(data => {
@@ -212,112 +325,51 @@ const initialize_game = () => {
                 });
             });
     
-
-    // update click speed every second and secs remaining
-    setInterval(() => {
-        if (secs_remaining>0) {
-            secs_remaining--
-            document.getElementById("time_remaining").textContent = secs_remaining
-        } else { // if 0 seconds remaining
-
+    const countdown_timer = setInterval(() => {
+        // if no start time exists, create the start time if the user is the leader.
+        if (start_time == undefined || start_time == null) {
+            fetch(`/api/get_game/${game_id}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.timestamp) {
+                    start_time = new Date(data.timestamp);
+                } else {
+                    if ((start_time == undefined || start_time == null) && user_id == game_base_state.player_one) {
+                        fetch(`/api/game/${game_id}/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            body: JSON.stringify({
+                                edit_field: 'timestamp',
+                                edit_replacement: new Date(Date.now() + 6000)
+                            })
+                        })
+                    }
+                }
+                
+            });
         }
-        if (counter > 1) {
-            cps = ((counter / (new Date().getTime()-firstClick))*1000)
-            document.getElementById("cps").innerText = "clicks per second: " + Math.round(cps*100)/100
-            setRecord(cps)
-            }
-        }, 1000);
 
-    
-    // set click speed to 0 if inactive
-    setInterval(() => {
-        if (currentClick && new Date().getTime() - currentClick >= 1750) {
-            counter = 0;
-            firstClick = null;
-            lastClickTime = null;
-            document.getElementById("cps").innerText = "clicks per second: 0";
-            }
-        }, 500);
-
-    // update game information, check if player has won and refresh co-op click counter
-    game_refresh_interval = setInterval(() => {
-        // send current info
-        // send info for player one
-        if (game_base_state.player_one == user_id) {
-            // update clicks
-            fetch(`/api/game/${game_id}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({
-                    edit_field: 'player_one_clicks',
-                    edit_replacement: mode_value-clicks_remaining
-                })
-            })
-            // update cps
-            fetch(`/api/game/${game_id}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({
-                    edit_field: 'player_one_cps',
-                    edit_replacement: top_cps
-                })
-            })
-        } // send info for player two 
-        else {
-            // update clicks
-            fetch(`/api/game/${game_id}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({
-                    edit_field: 'player_two_clicks',
-                    edit_replacement: mode_value-clicks_remaining
-                })
-            })
-            // update cps
-            fetch(`/api/game/${game_id}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({
-                    edit_field: 'player_two_cps',
-                    edit_replacement: top_cps
-                })
-            })  
+        if (start_time)  {
+        button_unlock_timer = -Math.trunc((Date.now()-start_time) / 1000);
+        document.getElementById("button_unlock_timer").textContent = button_unlock_timer+"..."
+        console.log(button_unlock_timer)
         }
-        // get recent info
-        fetch(`/api/get_game/${game_id}/`)
-        .then(response => response.json())
-        .then(data => {
-            if (mode_type == "first to") {
-                document.getElementById("player_one_clicks").textContent = data.player_one_clicks
-                document.getElementById("player_two_clicks").textContent = data.player_two_clicks
-                let player_one_percent = (100 - ((data.player_one_clicks) / mode_value) * 100) + "%";
-                document.getElementById("player_one_progress_div").style.height = player_one_percent
-                let player_two_percent = (100 - ((data.player_two_clicks) / mode_value) * 100) + "%";
-                document.getElementById("player_two_progress_div").style.height = player_two_percent
-            } else if ( mode_type == "best top speed") {
-                document.getElementById("player_one_clicks").textContent = data.player_one_cps
-                document.getElementById("player_two_clicks").textContent = data.player_two_cps
-                let player_one_percent = (100 - ((data.player_one_cps) / 75) * 100) + "%";
-                document.getElementById("player_one_progress_div").style.height = player_one_percent
-                let player_two_percent = (100 - ((data.player_two_cps) / 75) * 100) + "%";
-                document.getElementById("player_two_progress_div").style.height = player_two_percent
-            }
-        });
 
-        check_and_set_win_state()
-    }, 500);
+        if (button_unlock_timer <= 0) {
+            document.getElementsByClassName("cps_button")[0].disabled = false
+            document.getElementsByClassName("cps_button")[0].textContent = "Click me!"
+            clearInterval(countdown_timer)
+            secs_remaining = secs_remaining - Math.trunc((Date.now()-start_time) / 1000)
+            set_timers()
+        }
+
+        
+    }, 250);
+
+
 }
 
 

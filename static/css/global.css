@@ -91,6 +91,12 @@ a {
     background-color: #d9d9d9e6;
 }
 
+.cps_button:disabled {
+    background-color: #404040;
+    color: rgb(154, 154, 154);
+    border: solid white;
+}
+
 #homepage_flexbox {
     display: flex;
     height: 100%;
