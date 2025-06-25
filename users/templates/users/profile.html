@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+<div class="overlay">
+    <div class="popup" >
+        <p class="medium">Edit Profile</p>
+
+        <form id="auth_form" method="post" enctype="multipart/form-data" action="{% url 'edit_user' %}">
+            {% csrf_token %}
+
+            <div>
+                <label for="pfp_upload" class="small">Profile Picture</label>
+                <input type="file" name="pfp_upload" id="pfp_upload">
+                <p class="helper_text">1:1 aspect ratio 512x512 image files </p>
+            </div>
+
+            <div>
+                <label for="banner_upload" class="small">Profile Banner</label>
+                <input type="file" name="banner_upload" id="banner_upload">
+                <p class="helper_text">3:1 aspect ratio 1500x500 image files </p>
+            </div>
+
+            <div>
+                <label for="bio_upload" class="small">Bio</label>
+                <input type="text" id="bio_upload" name="bio_upload">
+            </div>
+
+            <div class="confirm_button">
+                <input class="header_button" id="popup_confirm_button" type="submit" value="Confirm"/>
+            </div>
+
+        </form>
+
+    </div>   
+</div>
+<!-- <div id="alert">
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+</div> -->
+<div class="center_div">
+    <div class="banner_pfp_div">
+        <img id="profile_image" src="{% static 'images/default_pfp.jpg' %}" alt="profile picture">
+        <img id="banner_image" src="{% static 'images/default_banner.jpg' %}" alt="banner picture">
+    </div>
+</div>
+
+<div id="user_info_flexbox">
+    <div class="medium" id="profile_user_info_left">
+        <div id="username_div"><p id="profile_username">Username...</p></div>
+        <div id="bio_div"><p id="profile_bio">Bio...</p></div>
+    </div>
+    <div class="small" id="profile_user_info_right">
+        <p>User's top cps: <span id="top_cps_value">0</span></p>
+        <p>Leaderboard pos: <span id="leaderboard_pos_value">#0</span></p>
+    </div>
+</div>
+
+
+<p id="game_history_text" class="title">Game History</p>
+<div class="horizontal_thin_bar"></div>
+
+<div id="game_history">
+    <p id="past_games_hint_text">Past games will appear here...</p>
+    <div style="display: none;" class="game_flexbox">
+
+        <div class="history_win_div">
+            <p class="win_text">Win</p>
+        </div>
+
+        <div class="vertical_thin_bar_light"></div>
+
+        <div class="history_column_div">
+            <p class="history_title">Timestamp</p>
+            <p id="history_timestamp_date">Date</p>
+            <p id="history_timestamp_hour">Hour</p>
+        </div>
+
+        <div class="vertical_thin_bar_light"></div>
+
+        <div class="history_column_div">
+            <p class="history_title">Details</p>
+            <p><span class="history_title">Mode - </span><span id="history_mode">First to 100 clicks</span></p>
+            <p><span class="history_title">Opponent - </span><span id="history_opponent">Freddie uk</span></p>
+            <p><span class="history_title">Top Speed - </span><span id="history_speed">15 cps</span></p>
+        </div>
+
+    </div>
+</div>
+
+<button style="display: none;" id="edit_button" class="header_button">Edit ✏️</button>
+
+
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<script>
+    const profile_id = "{{profile_id}}";
+    
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-right",
+        "timeOut": "5000"
+    };
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'debug' %}
+                toastr.info("{{ message|escapejs }}");
+            {% elif message.tags == 'info' %}
+                toastr.info("{{ message|escapejs }}");
+            {% elif message.tags == 'success' %}
+                toastr.success("{{ message|escapejs }}");
+            {% elif message.tags == 'warning' %}
+                toastr.warning("{{ message|escapejs }}");
+            {% elif message.tags == 'error' %}
+                toastr.error("{{ message|escapejs }}");
+            {% else %}
+                toastr.info("{{ message|escapejs }}");
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+</script>
+
+
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}

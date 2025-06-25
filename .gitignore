@@ -179,6 +179,10 @@ cython_debug/
 node_modules/
 package-lock.json
 package.json
-
 eslint.config.mjs
 node_modules/.package-lock.json
+
+
+# Image folders
+profile_images/
+static/twemoji/svg/

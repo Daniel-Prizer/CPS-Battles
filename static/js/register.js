@@ -1,3 +1,4 @@
+// once the DOM has loaded, get the users country and set it into the register form.
 document.addEventListener("DOMContentLoaded", function () {
     fetch('https://ipapi.co/json/')
     .then(res => res.json())

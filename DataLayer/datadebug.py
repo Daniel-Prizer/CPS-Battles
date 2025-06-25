@@ -30,4 +30,4 @@ import uuid
 #print(api.edit_game(uuid.UUID('6371dc39-c472-44bc-a1d5-31313063bf63'),"started",False))
 """ print(api.edit_game(uuid.UUID('6371dc39-c472-44bc-a1d5-31313063bf63'),"winning_player",None))
 print(api.get_game(uuid.UUID('6371dc39-c472-44bc-a1d5-31313063bf63'))) """
-print(api.get_game(uuid.UUID('a0005447-d177-4115-a611-d101a029def6')))
+print(api.get_games_for_user_id(1))

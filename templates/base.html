@@ -5,6 +5,17 @@
     <title>{% block title %}CPS Battles{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Pixelify Sans' rel='stylesheet'>
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- Twemoji JS -->
     <script src="{% static 'js/twemoji.min.js' %}"></script>
     
 </head>
@@ -34,6 +45,9 @@
 
     {% if user.is_authenticated %}
         <script src="{% static 'js/base_logged_in.js' %}"></script>
+        <script>
+            const user_id = "{{user.id}}";
+        </script>
     {% else %}
         <script src="{% static 'js/base_logged_out.js' %}"></script>
     {% endif %}

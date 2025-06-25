@@ -1,9 +1,11 @@
 from DataLayer.django_init import setup_django
 from django.forms.models import model_to_dict
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 from users.models import Users
 from games.models import Games
+
 
 setup_django()
 User = get_user_model()
@@ -20,7 +22,9 @@ class users_dl:
             bio=bio,
             password=password,
         )
-        return model_to_dict(user)
+        user_dict = model_to_dict(user)
+        user_dict["password"] = ""
+        return user_dict
 
     def edit_user(self, user_id: int, field: str, replacement: str) -> dict:
         user = Users.objects.get(id=user_id)
@@ -54,14 +58,23 @@ class users_dl:
 
     def get_user_by_id(self, user_id: str) -> dict:
         user = Users.objects.get(id=user_id)
-        return model_to_dict(user)
+        user_dict = model_to_dict(user)
+        user_dict["password"] = ""
+        return user_dict
 
     def get_user_by_username(self, username: str) -> dict:
         user = Users.objects.get(username=username)
-        return model_to_dict(user)
+        user_dict = model_to_dict(user)
+        user_dict["password"] = ""
+        return user_dict
 
     def get_all_users(self) -> list:
-        return [model_to_dict(user) for user in Users.objects.all()]
+        toRet = []
+        for user in Users.objects.all():
+            user_dict = model_to_dict(user)
+            user_dict["password"] = ""
+            toRet.append(user_dict)
+        return toRet
 
 class games_dl:
     def register_game(self,
@@ -148,11 +161,11 @@ class games_dl:
 
     def get_games_for_user_id(self, user_id: int) -> list:
         lis = []
-        for game in Games.objects.filter(player_one=user_id):
-            model_dict = model_to_dict(game)
-            model_dict["game_id"] = game.game_id
-            lis.append(model_dict)
-        for game in Games.objects.filter(player_two=user_id):
+        for game in Games.objects.filter(
+        Q(player_one=user_id) | Q(player_two=user_id),
+        timestamp__isnull=False,
+        winning_player__isnull=False
+        ).order_by('-timestamp'):
             model_dict = model_to_dict(game)
             model_dict["game_id"] = game.game_id
             lis.append(model_dict)

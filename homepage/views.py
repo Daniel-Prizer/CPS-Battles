@@ -17,7 +17,7 @@ def homepage(request):
             player_one_cps = top_cps,
             player_two = None,
             player_two_cps = None,
-            mode = "Homepage"
+            mode = "Homepage",
             )
         api.edit_user(user_id,"top_cps_game_id",game["game_id"])
         api.edit_user(user_id,"top_cps",top_cps)

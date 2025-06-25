@@ -6,33 +6,33 @@
 {% block content %}
 
     {% if user.is_authenticated %}
-    <div id="login-box" class="main-box-background">
+    <div id="login_box" class="main_box_background">
         <p>You are already logged in.</p>
     </div>
     {% else %}
-    <div id="login-box" class="main-box-background">
-        <h1 id="login-text" class="title">Login</h1>
-        <form id="auth-form" method="post" action="{% url 'login:login' %}">
+    <div id="login_box" class="main_box_background">
+        <h1 id="login_text" class="title">Login</h1>
+        <form id="auth_form" method="post" action="{% url 'login:login' %}">
             {% csrf_token %}
 
             {% for message in messages %}
                 {{ message }}
             {% endfor %}
 
-            <div class="login-item">
+            <div class="login_item">
             <label for="id_username" class="small">Username<br></label>
             <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
             </div>
 
-            <div class="login-item">
+            <div class="login_item">
             <label for="id_password" class="small">Password<br></label>
             <input type="password" name="password" autocomplete="current-password" required="" id="id_password">
             </div>
 
-            <div class="login-item">
+            <div class="login_item">
                 <p class="small">No account? <a href="/register">Create account</a></p>
             </div>
-            <div class="confirm-button">
+            <div class="confirm_button">
                 <input class="header_button" type="submit" value="Confirm"/>
             </div>
         </form>

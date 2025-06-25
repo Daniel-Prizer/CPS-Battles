@@ -1,22 +1,27 @@
-let game_base_state = undefined
-let mode_type = undefined
-let mode_value = undefined
+/* eslint-disable no-undef */
+// global variables
+// general game details
+let game_base_state;
+let mode_type;
+let mode_value;
 
+// real-time game details
 let clicks_remaining = 0
 let secs_remaining = 30
-
 let counter = 0;
 let firstClick;
 let currentClick;
 let cps;
 let top_cps = 0;
 
-let start_time = undefined
-let button_unlock_timer = undefined
+// timers
+let start_time;
+let button_unlock_timer;
+let game_refresh_interval;
 
-let = game_refresh_interval = undefined
 
-function getCookie(name) {
+// function to get browser token cookie to send with fetch requests to server
+const getCookie = (name) => {
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
         const cookies = document.cookie.split(";");
@@ -31,16 +36,16 @@ function getCookie(name) {
     return cookieValue;
 }
 
+// function to set all game timers, for updating game info etc
 const set_timers = () => { 
-    // update click speed every second and secs remaining
     setInterval(() => {
-        if (secs_remaining>0) {
+        if (secs_remaining>0) { // update secs remaining countdown
             secs_remaining--
             document.getElementById("time_remaining").textContent = secs_remaining
         } else { // if 0 seconds remaining
 
         }
-        if (counter > 1) {
+        if (counter > 1) { // update click speed
             cps = ((counter / (new Date().getTime()-firstClick))*1000)
             document.getElementById("cps").innerText = "clicks per second: " + Math.round(cps*100)/100
             setRecord(cps)
@@ -53,7 +58,6 @@ const set_timers = () => {
         if (currentClick && new Date().getTime() - currentClick >= 1750) {
             counter = 0;
             firstClick = null;
-            lastClickTime = null;
             document.getElementById("cps").innerText = "clicks per second: 0";
             }
         }, 500);
@@ -114,7 +118,7 @@ const set_timers = () => {
                 })
             })  
         }
-        // get recent info
+        // get recent info and update DOM
         fetch(`/api/get_game/${game_id}/`)
         .then(response => response.json())
         .then(data => {
@@ -134,28 +138,38 @@ const set_timers = () => {
                 document.getElementById("player_two_progress_div").style.height = player_two_percent
             }
         });
-
+        // check if anyone won yet
         check_and_set_win_state()
     }, 500);
 }
 
 
 const check_and_set_win_state = () => {
+    // get the game state from database
     fetch(`/api/get_game/${game_id}/`)
         .then(response => response.json())
         .then(data => {
+            // if there is a winning player, and it is the current playerÞ
             if (data.winning_player == user_id) {
+                // stop any further game updates
                 clearInterval(game_refresh_interval)
+                // player won html box
                 document.getElementsByClassName("overlay")[0].style.display = "flex"
             }
+            // if there is a winning player, and it is NOT the current player
             else if (data.winning_player != user_id && data.winning_player) {
+                // stop any further game updates
                 clearInterval(game_refresh_interval)
+                // player lost html box
                 document.getElementById("win_status").textContent = "You lost."
                 document.getElementsByClassName("overlay")[0].style.display = "flex"
             }
+            // Otherwise, if there is no winning player and there is no time remaining:
             else if (secs_remaining == 0) {
                 if (mode_type == "first to") {
+                    // if player 1 had more clicks
                     if (data.player_one_clicks > data.player_two_clicks) {
+                        // if the current user is player 1, show win msg and update game data
                         if (data.player_one != user_id) {
                             document.getElementById("win_status").textContent = "You lost."
                         }
@@ -171,11 +185,14 @@ const check_and_set_win_state = () => {
                                 edit_replacement: data.player_one
                             })
                         })
-                    } else {
+                    } else { // (player 1 lost):
+                        // if the current user is player 1 (the loser)
                         if (data.player_two != user_id) {
+                            // show loss msg
                             document.getElementById("win_status").textContent = "You lost."
                         }
                         document.getElementsByClassName("overlay")[0].style.display = "flex"
+                        // update win status in db
                         fetch(`/api/game/${game_id}/`, {
                             method: 'POST',
                             headers: {
@@ -188,8 +205,11 @@ const check_and_set_win_state = () => {
                             })
                         })
                     }
+                    // game is finished so end all game refreshes.
                     clearInterval(game_refresh_interval)
                 } else if (mode_type == "best top speed") {
+                    // if the mode is best top speed do the same as before but compare cps instead of clicks. 
+                    // please refer to the comments above
                     if (data.player_one_cps > data.player_two_cps) {
                         if (data.player_one != user_id) {
                             document.getElementById("win_status").textContent = "You lost."
@@ -226,6 +246,7 @@ const check_and_set_win_state = () => {
                     clearInterval(game_refresh_interval)
                 }
             }
+            // if the mode is first to and current user reaches 0 clicks remaining, register them as the winner in db
             else if (mode_type == "first to" && clicks_remaining == 0) {
                 document.getElementsByClassName("overlay")[0].style.display = "flex"
                     fetch(`/api/game/${game_id}/`, {
@@ -243,20 +264,25 @@ const check_and_set_win_state = () => {
         });
 }
 
+
+// Once the game has loaded, do this:
 document.addEventListener("DOMContentLoaded", function () {
+    // set "you won" or "you lost" button to redirect to home
     document.getElementById("popup_confirm_button").onclick = () => {
         window.location.href = "/"
     }
+    // cps button set onclick
     document.getElementsByClassName("cps_button")[0].onclick = function () {
         click()
     }
+    // initially disable the cps button while the countdown goes down.
     document.getElementsByClassName("cps_button")[0].disabled = true
     fetch(`/api/get_game/${game_id}/`)
     .then(response => response.json())
     .then(data => {
+        // get the initial game details, mode and players etc.
         game_base_state = data
-        console.log(game_base_state)
-
+        // parse the mode and value and set the global variables and change the DOM accordingly
         if (game_base_state.mode.slice(0,8).toLowerCase() == 'first to') {
             mode_type = 'first to'
             //"50", "75", "100", "125", "150"
@@ -286,7 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 mode_value = 30 }
             secs_remaining = mode_value
         }
-
+        // initialize the game
         initialize_game()
     });
 
@@ -295,6 +321,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 const initialize_game = () => {
+    // change the DOM based on the game mode
     if (mode_type == "first to") {
         document.getElementById("main_game_stat_title").innerHTML = 'Clicks remaining: <span id="main_game_stat">0</span>'
         document.getElementById("main_game_stat").innerText = mode_value
@@ -302,11 +329,13 @@ const initialize_game = () => {
         document.getElementById("main_game_stat_title").innerHTML = 'Best click speed: <span id="main_game_stat">0</span>'
     }
     
+    // write the usernames and their flags below the progress bars:
     fetch(`/api/get_user/${game_base_state.player_one}/`)
             .then(response => response.json())
             .then(data => {
-                player1 = data
+                let player1 = data
                 document.getElementById("player_one_name").innerText = player1.username+" "+player1.flag_emoji
+                // eslint-disable-next-line no-undef
                 twemoji.parse(document.getElementById("player_one_name"), {
                     folder: 'svg',
                     ext: '.svg',
@@ -316,8 +345,9 @@ const initialize_game = () => {
     fetch(`/api/get_user/${game_base_state.player_two}/`)
             .then(response => response.json())
             .then(data => {
-                player2 = data
+                let player2 = data
                 document.getElementById("player_two_name").innerText = player2.username+" "+player2.flag_emoji
+                // eslint-disable-next-line no-undef
                 twemoji.parse(document.getElementById("player_two_name"), {
                     folder: 'svg',
                     ext: '.svg',
@@ -325,15 +355,19 @@ const initialize_game = () => {
                 });
             });
     
+
+    // start the countdown timer
     const countdown_timer = setInterval(() => {
-        // if no start time exists, create the start time if the user is the leader.
+        // if no local start time exists:
         if (start_time == undefined || start_time == null) {
             fetch(`/api/get_game/${game_id}/`)
             .then(response => response.json())
             .then(data => {
                 if (data.timestamp) {
+                    // attempt to get the start time from the database
                     start_time = new Date(data.timestamp);
-                } else {
+                } else { // if it doesnt exist do:
+                    // player 1 sets the timestamp/start_time
                     if ((start_time == undefined || start_time == null) && user_id == game_base_state.player_one) {
                         fetch(`/api/game/${game_id}/`, {
                             method: 'POST',
@@ -343,7 +377,7 @@ const initialize_game = () => {
                             },
                             body: JSON.stringify({
                                 edit_field: 'timestamp',
-                                edit_replacement: new Date(Date.now() + 6000)
+                                edit_replacement: new Date(Date.now() + 6000) // set the start time 6 seconds from now
                             })
                         })
                     }
@@ -351,18 +385,24 @@ const initialize_game = () => {
                 
             });
         }
-
+        
+        // if a local start time exists
         if (start_time)  {
-        button_unlock_timer = -Math.trunc((Date.now()-start_time) / 1000);
-        document.getElementById("button_unlock_timer").textContent = button_unlock_timer+"..."
-        console.log(button_unlock_timer)
+            // write the countdown on the button
+            button_unlock_timer = -Math.trunc((Date.now()-start_time) / 1000);
+            document.getElementById("button_unlock_timer").textContent = button_unlock_timer+"..."
         }
 
+        // if the countdown is over:
         if (button_unlock_timer <= 0) {
+            // enable the cps button and write the correct text on the button.
             document.getElementsByClassName("cps_button")[0].disabled = false
             document.getElementsByClassName("cps_button")[0].textContent = "Click me!"
+            // clear the countdown timer
             clearInterval(countdown_timer)
+            // set the remaining time left for the game based on the start_time
             secs_remaining = secs_remaining - Math.trunc((Date.now()-start_time) / 1000)
+            // set the game timers
             set_timers()
         }
 
@@ -373,30 +413,38 @@ const initialize_game = () => {
 }
 
 
-
-function click() {
+// function for the cps button
+const click = () => {
+    // add to the click amount variable
     counter++
+    // remove from the click remaining variable
     clicks_remaining--
+    // check if someone has won yet
     check_and_set_win_state()
+    // set the clicks_remaining text in the DOM if the mode applies
     if (mode_type == "first to") {
         document.getElementById("main_game_stat").innerText = clicks_remaining
     }
+    // if this is the users first click, set the cps to 1.
     if (counter == 1){
         firstClick = new Date().getTime();
         document.getElementById("cps").innerText = "clicks per second: "+ 1.00
-    } else if (counter<3) {
+    }
+    // if the click counter is less than 3 balance the clicks so users dont exploit the first few clicks to set a huge record. 
+    else if (counter<3) {
         currentClick = new Date().getTime();
         cps = ((counter / (currentClick-firstClick))*1000)
-        /* Lower the cps that is attained from the first few clicks, it can cause issues with the record. */
         if (cps > 8) {
             cps = cps-6
         }        
         document.getElementById("cps").innerText = "clicks per second: " + Math.round(cps*100)/100
+        // attempt to set the users record CPS if applies.
         setRecord(cps)
-    } else {
+    } else { // if this is just a regular click somewhere inbetween change the cps accordingly and set the clicks remaining
         currentClick = new Date().getTime();
         cps = ((counter / (currentClick-firstClick))*1000)
         document.getElementById("cps").innerText = "clicks per second: " + Math.round(cps*100)/100
+        // attempt to set the users record CPS if applies.
         setRecord(cps)
     }
 
@@ -405,10 +453,11 @@ function click() {
 
 
 function setRecord(cps) {
-    console.log(top_cps,cps,typeof(top_cps),typeof(cps))
+    // if the current cps is higher than the users historic top cps FOR THE CURRENT GAME ONLY
     if (top_cps < cps) {
         top_cps = Math.round(cps*100)/100
         if (mode_type == "best top speed") {
+            // set the new top_cps in the DOM
             document.getElementById("main_game_stat").innerHTML = top_cps
         }
     }
@@ -417,7 +466,9 @@ function setRecord(cps) {
     fetch(`/api/get_user/${user_id}/`)
     .then(response => response.json())
     .then(data => {
+        // if the users current game top_cps is higher than the users historic top_cps for all games, set a record in the db
         if (top_cps > data.top_cps) {
+            // set the cps number
             fetch(`/api/user/${user_id}/`, {
                 method: 'POST',
                 headers: {
@@ -429,6 +480,7 @@ function setRecord(cps) {
                     edit_replacement: top_cps
                 })
             })
+            // set the game id to link the record
             fetch(`/api/user/${user_id}/`, {
                 method: 'POST',
                 headers: {
