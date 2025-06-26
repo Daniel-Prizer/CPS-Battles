@@ -5,7 +5,7 @@ from .models import Games
 from DataLayer.API import DataLayerAPI
 from django.http import JsonResponse
 import json
-from django.core.paginator import Paginator
+
 
 
 api = DataLayerAPI()
@@ -51,8 +51,6 @@ def get_game(request, game_id):
 def get_games_for_user(request, user_id):
     game = api.get_games_for_user_id(user_id)
     return JsonResponse(game, safe=False)
-
-
 
 
 def edit_game(request, game_id):

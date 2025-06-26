@@ -1,14 +1,48 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Leaderboard{% endblock %}
+
 
 {% block content %}
-<p>Leaderboard page</p>
+  <div class="main_box_background" id="leaderboard_main_box">
+    <div id="leaderboard_titles"><p class="pos_item">Position</p><p class="speed_item">Click Speed</p><p class="user_item">User</p></div>
+    <div id="leaderboard_list">
+      <div style="display: none;" class="leaderboard_item"><p class="pos_item">1.</p><p class="speed_item">30 CPS</p><img class="mini_pfp" src="{% static 'images/default_pfp.jpg' %}" alt="profile picture"><p class="user_item">Freddie 🇬🇧</p></div>
+      <div style="display: none;" class="horizontal_thin_dark_bar"></div>
+    </div>
+
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <button class="pagination_button" onclick="window.location.href = window.location.href.split('?')[0]+'?page=1'">&laquo;</button>
+        <button class="pagination_button" onclick="window.location.href = window.location.href.split('?')[0]+'?page={{ page_obj.previous_page_number }}'">&lsaquo;</button>
+      {% else %}
+        <button class="pagination_button" disabled>&laquo;</button>
+        <button class="pagination_button" disabled>&lsaquo;</button>
+      {% endif %}
+
+      <span class="small">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+      {% if page_obj.has_next %}
+        <button class="pagination_button" onclick="window.location.href = window.location.href.split('?')[0]+'?page={{ page_obj.next_page_number }}'">&rsaquo;</button>
+        <button class="pagination_button" onclick="window.location.href = window.location.href.split('?')[0]+'?page={{ page_obj.paginator.num_pages }}'">&raquo;</button>
+      {% else %}
+        <button class="pagination_button" disabled>&rsaquo;</button>
+        <button class="pagination_button" disabled>&raquo;</button>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
+
 
 
 
 {% block scripts %}
 <script src="{% static 'js/leaderboard.js' %}"></script>
+<script>
+  const page_obj = "{{page_obj}}";
+  const users_json = JSON.parse('{{ users_json|escapejs }}');
+  const default_pfp = "{% static 'images/default_pfp.jpg' %}";
+  const page_num = "{{ page_obj.number }}";
+</script>
 {% endblock %}

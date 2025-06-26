@@ -47,6 +47,20 @@ a {
 #friends_button:hover {
     background-color:rgb(154, 154, 154);
 }
+
+.mini_pfp {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #3F5B76;
+    background-color: #3F5B76;
+    margin-top: 10px;
+    margin-right: 5px
+}
+
+
+
+
 /* --------------------------- HEADER --------------------------- */
 .header_flexbox {
   display: flex;
@@ -537,4 +551,92 @@ a {
     #username_div {
         padding-bottom: 5%;
     }
+}
+
+
+/* --------------------------- LEADERBOARD --------------------------- */
+
+#leaderboard_list {
+    padding-left: 70px;
+}
+
+#leaderboard_titles {
+    padding-left: 70px;
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    /* background-color: red; */
+
+}
+
+.leaderboard_item {
+    display: flex;
+    flex-direction: row;
+    /* background-color: green; */
+}
+
+.pos_item {
+    min-width: 200px;
+}
+
+.speed_item {
+    min-width: 250px;
+}
+
+.user_item {
+    width: 350px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#leaderboard_main_box {
+    margin-top: 3%;
+    padding-left: 50px;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    border-radius: 6%/7%;
+    min-height: 610px;
+}
+
+.horizontal_thin_dark_bar {
+    width: 100%+120px;
+    height: 1px;
+    background-color: #00000078;
+    margin-left: -120px;
+    margin-top: -10px;
+}
+
+.pagination_button {
+    background-color: #3F5B76;
+    color: white;
+    font-size: larger;
+    padding: 0.7rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    text-align: center;
+    margin-left: 7px;
+    margin-right: 7px;
+    border: none;
+    border-radius: 30%/30%;
+    font-weight: bolder;
+}
+
+.pagination_button:hover {
+    background-color:rgb(154, 154, 154);
+}
+.pagination {
+    margin: auto;
+    width: 50%;
+    margin-top: 30px;
+}
+
+.pagination_button:active {
+    background-color: #b4bfc9;
+    color: black;
+}
+
+.pagination_button:disabled {
+    background-color: #404040;
+    color: rgb(154, 154, 154);
 }
