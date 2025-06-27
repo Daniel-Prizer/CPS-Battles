@@ -47,25 +47,27 @@ function setRecord(cps) {
 
 // function for the cps button
 const click = () => {
+    currentClick = new Date().getTime();
     // increment the click counter
     counter++
     // if this is the users first click, set the cps to 1.
     if (counter == 1){
         firstClick = new Date().getTime();
-        document.getElementById("cps").innerText = "clicks per second: "+ 1.00
+        document.getElementById("cps").innerText = "clicks per second: 1.00"
     }
-    // if the click counter is less than 3 balance the clicks so users dont exploit the first few clicks to set a huge record.  
-    else if (counter<3) {
-        currentClick = new Date().getTime();
+    // if the click counter is less than 4 balance the clicks so users dont exploit the first few clicks to set a huge record.  
+    else if (counter<4) {
         cps = ((counter / (currentClick-firstClick))*1000)
-        if (cps > 8) {
+        if (cps > 15) {
+            cps = cps-12
+        }
+        else if (cps > 8) {
             cps = cps-6
         }        
         document.getElementById("cps").innerText = "clicks per second: " + Math.round(cps*100)/100
         // attempt to set the users record CPS if applies.
         setRecord(cps)
     } else {// if this is just a regular click somewhere inbetween change the cps accordingly
-        currentClick = new Date().getTime();
         cps = ((counter / (currentClick-firstClick))*1000)
         document.getElementById("cps").innerText = "clicks per second: " + Math.round(cps*100)/100
         // attempt to set the users record CPS if applies.
@@ -100,13 +102,24 @@ setInterval(() => {
 
 // reset cps to 0 if user is inactive for a couple of seconds
 setInterval(() => {
-        if (currentClick && new Date().getTime() - currentClick >= 1750) {
+        if (currentClick && new Date().getTime() - currentClick >= 500) {
             counter = 0;
+            cps = 0;
             firstClick = null;
             document.getElementById("cps").innerText = "clicks per second: 0";
         }
-    }, 500);
+    }, 200);
+
+// reset cps to 0 every 5 seconds so the cps doesn't stagnate over a long period of time
+setInterval(() => {
+    counter = 0;
+    cps = 0;
+    firstClick = null;
+}, 5083);
 
 });
+
+
+
 
 

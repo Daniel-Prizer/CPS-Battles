@@ -30,11 +30,12 @@ import uuid
 #print(api.edit_game(uuid.UUID('6371dc39-c472-44bc-a1d5-31313063bf63'),"started",False))
 """ print(api.edit_game(uuid.UUID('6371dc39-c472-44bc-a1d5-31313063bf63'),"winning_player",None))
 print(api.get_game(uuid.UUID('6371dc39-c472-44bc-a1d5-31313063bf63'))) """
-print(api.get_games_for_user_id(1))
 
 import random
 import string
 from DataLayer.API import DataLayerAPI
+from users.models import Users
+
 
 
 # Helper to generate random usernames and bios
@@ -85,3 +86,12 @@ for user_id in user_ids:
 print("Updated users' top_cps from their games.")
 
 print("Created 10 users and 20 games.")
+
+""" # Create a user normally
+user = Users.objects.create_user(username='Anonymous', password='testpass')
+
+# Set a custom/out-of-order id (e.g., 9999)
+user.id = 9999
+user.save(force_update=True)
+
+print(user.id, user.username) """

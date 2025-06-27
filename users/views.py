@@ -7,6 +7,7 @@ import os
 from io import BytesIO
 from PIL import Image
 from django.core.files.base import ContentFile
+import json
 
 api = DataLayerAPI()
 
@@ -17,6 +18,18 @@ def get_user(request, user_id):
     user['avatar'] = user['avatar'].url if user['avatar'] else ''
     user['banner'] = user['banner'].url if user['banner'] else ''
     return JsonResponse(user)
+
+def edit_user_DLAPI(request, user_id):
+     # expects edit field to be one of the ones listed under api.py
+    if request.method == "POST":
+        data = json.loads(request.body)
+        edit_field = data.get("edit_field")
+        edit_replacement = data.get("edit_replacement")
+        api.edit_user(user_id, edit_field, edit_replacement)
+        return JsonResponse({}, status=200)
+    else:
+        return JsonResponse({"error": "Only POST allowed"}, status=405)
+
 
 def edit_user(request):
     if request.method == "POST":
@@ -111,3 +124,18 @@ def edit_user(request):
 
 def user_profile(request, user_id):
     return render(request, 'users/profile.html', {"profile_id": user_id})
+
+
+
+# too many security vulnerabilities with this... T-T
+# not gonna allow non-logged users to play games or edit database ig
+""" def create_guest(request):
+
+    if request.COOKIES.get('guest_account'):
+        return JsonResponse({"user_id": request.COOKIES.get('guest_account')}, status=200) 
+    
+    username = "Guest User "+uuid.uuid4().hex
+    user_id = api.register_user(username,str(uuid.uuid4),"I am a guest user","🌐")["id"]
+    response = JsonResponse({"user_id": user_id}, status=200) 
+    response.set_cookie('guest_account', user_id, max_age=360000)
+    return response """

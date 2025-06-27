@@ -25,11 +25,11 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
+            messages.success(request, "Login success.")
             return redirect("/")
         else:
-            messages.info(request, "Username or password is incorrect")
-
-    return render(request, "login.html")
+            messages.error(request, "Username or password are incorrect.")
+    return render(request, "login/login.html")
 
 def registerPage(request):
     if request.method == "POST":

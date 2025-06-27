@@ -1,23 +1,29 @@
 /* eslint-disable no-undef */
 
+
 document.addEventListener("DOMContentLoaded", function () {
+
+    document.getElementsByClassName("close_button")[0].onclick = () => {
+        document.getElementsByClassName("overlay")[0].style.display="none"
+    }
+
     // get the current user (viewer):
+    if (typeof user_id !== 'undefined') {
     fetch(`/api/get_user/${user_id}/`)
         .then(response => response.json())
         .then(data => {
-            
-            console.log("viwer: "+data.id)
-            console.log("profile: "+profile_id)
             if (profile_id == data.id) {
                 document.getElementById("edit_button").style.display = "block"
             }
         });
+    }
+
 
     // get the profile user (host):
     fetch(`/api/get_user/${profile_id}/`)
         .then(response => response.json())
         .then(data => {
-
+            console.log(data)
             // set window title
             document.title = data.username+"'s Profile"
 
@@ -32,9 +38,13 @@ document.addEventListener("DOMContentLoaded", function () {
             // bio
             document.getElementById("profile_bio").textContent = data.bio
             // avatar
-            document.getElementById("profile_image").src = data.avatar
+            if (data.avatar) {
+                document.getElementById("profile_image").src = data.avatar
+            }
             // banner
+            if (data.banner) {
             document.getElementById("banner_image").src = data.banner
+            }
             // top_cps and leaderboard:
             document.getElementById("top_cps_value").textContent = data.top_cps
             /* TODO add leaderboard */

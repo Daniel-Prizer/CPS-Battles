@@ -37,7 +37,10 @@ def join_game(request, game_id):
         return render(request, "games/full.html")  # Show an error template or redirect
 
     elif not game.player_two and game.player_one != request.user:
-        api.edit_game(game.game_id,"player_two",request.user.id)
+        if request.user.id:
+            api.edit_game(game.game_id,"player_two",request.user.id)
+        else:
+            return redirect("/login/")
     
     elif game.player_two and game.player_one and game.started:
         return render(request, 'games/gameplay.html', {"game_id": game_id})

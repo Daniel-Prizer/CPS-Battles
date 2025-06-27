@@ -25,14 +25,20 @@
             <div id="player_info_flexbox">
                 <div id ="player_one_info">
                     <p id="player_one_clicks" class="small">0</p>
-                    <div  class="player_progress_div_bg"><div id="player_one_progress_div" class="player_progress_div"></div></div>
-                    <p id="player_one_name" class="small">Player 1</p>
+                    <div class="player_progress_div_bg"><div id="player_one_progress_div" class="player_progress_div"></div></div>
+                    <div class="flexbox_column_center">
+                        <img class="mini_pfp" src="{% static 'images/default_pfp.jpg' %}" alt="profile picture">
+                        <p id="player_one_name" class="gameplay_player_name">Player 1</p>
+                    </div>
                 </div>
 
                 <div id ="player_two_info">
                     <p id="player_two_clicks" class="small">0</p>
                     <div  class="player_progress_div_bg"><div id="player_two_progress_div" class="player_progress_div"></div></div>
-                    <p id="player_two_name" class="small">Player 2</p>
+                    <div class="flexbox_column_center">
+                        <img class="mini_pfp" src="{% static 'images/default_pfp.jpg' %}" alt="profile picture">
+                        <p id="player_two_name" class="gameplay_player_name">Player 2</p>
+                    </div>
                 </div>
 
             </div>

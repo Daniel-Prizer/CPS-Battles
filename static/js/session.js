@@ -1,9 +1,12 @@
+/* eslint-disable no-undef */
 // global variables
 let send_tutorial_to_player2 = false
 let player1 = undefined
 let player2 = undefined
 let mode_type = "First to 100 clicks"
 let mode_value;
+
+
 
 // function to get browser token cookie to send with fetch requests to server
 const getCookie = (name) => {
@@ -21,8 +24,10 @@ const getCookie = (name) => {
     return cookieValue;
 }
 
+
+
 // once the DOM loads:
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     // set the default selected more to 'first to 50'
     let value_selector = document.getElementById("value_select")
     value_selector.value = "50"
@@ -78,8 +83,12 @@ document.addEventListener("DOMContentLoaded", function () {
         let title = 'first to'
         if (game_selector.value.slice(0,8).toLowerCase() == 'first to') {
             title = 'first to'
+            // change the select option value to be the actual current value
+            document.getElementById("select_first_to_value").textContent = value_selector.value
         } else {
             title = 'best top speed'
+            // change the select option value to be the actual current value
+            document.getElementById("select_best_top_value").textContent = value_selector.value
         }
         change_tutorial(title,value_selector.value)
     }
@@ -98,6 +107,8 @@ document.addEventListener("DOMContentLoaded", function () {
         // if the game selected is "first to x clicks"
         if (game_selector.value.slice(0,8).toLowerCase() == 'first to') {
             value_selector.value = "50"
+            // change the select option value of the gamemode best top speed to the default value (10)
+            document.getElementById("select_best_top_value").textContent = 10
             // hide best top speed gamemode options
             for (let i = 0; i < best_top_options.length; i++) {
                 best_top_options[i].style.display = "none";
@@ -108,6 +119,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         } else { // if the game selected is "best top speed in x secs" do the opposite
             value_selector.value = "10"
+            // change the select option value of the gamemode first to __ to the default value (50)
+            document.getElementById("select_first_to_value").textContent = 50
             for (let i = 0; i < best_top_options.length; i++) {
                 best_top_options[i].style.display = "initial";
             }
@@ -179,6 +192,11 @@ setInterval(() => {
                 player1 = data2
                 let player1_text = document.getElementById("player1_text")
                 player1_text.innerText = player1.username+" "+player1.flag_emoji+" 👑"
+                let pfp = default_pfp;
+                if (player1.avatar != "") {
+                    pfp = player1.avatar.startsWith('/media/') ? player1.avatar : '/media/' + player1.avatar;
+                }
+                document.getElementById("player1_user_span").insertAdjacentHTML("afterbegin", `<img class="mini_pfp" src="${pfp}" alt="profile picture">`);
                 // eslint-disable-next-line no-undef
                 twemoji.parse(document.getElementById("player1_text"), {
                     folder: 'svg',
@@ -196,6 +214,11 @@ setInterval(() => {
                 player2 = data3
                 let player2_text = document.getElementById("player2_text")
                 player2_text.innerText = player2.username+" "+player2.flag_emoji
+                let pfp = default_pfp;
+                if (player2.avatar != "") {
+                    pfp = player2.avatar.startsWith('/media/') ? player2.avatar : '/media/' + player2.avatar;
+                }
+                document.getElementById("player2_user_span").insertAdjacentHTML("afterbegin", `<img class="mini_pfp" src="${pfp}" alt="profile picture">`);
                 // eslint-disable-next-line no-undef
                 twemoji.parse(document.getElementById("player2_text"), {
                     folder: 'svg',
@@ -261,10 +284,8 @@ setInterval(() => {
 
     });
     // if the current user is player1 and we need to send the selected game to the other user
-    // eslint-disable-next-line no-undef
-    if (user_id == player1.id && send_tutorial_to_player2) {
+    if ((typeof(player1) !== "undefined") && user_id == player1.id && send_tutorial_to_player2) {
         // set the game mode in db
-        // eslint-disable-next-line no-undef
         fetch(`/api/game/${game_id}/`, {
             method: 'POST',
             headers: {

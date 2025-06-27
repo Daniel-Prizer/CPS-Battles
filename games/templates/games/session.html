@@ -6,15 +6,15 @@
 {% block content %}
 
 <div id="pregame_box" class="main_box_background">
-    <p id="sharelink_text">Please share this link with your friend so that they may join your lobby.</p>
+    <p id="sharelink_text">Share this link with the friend that you want to invite.</p>
     <button class="header_button" id="copy_link_button">Copy 🔗</button>
     <input type="text" id="game_link" name="game_link" value="..." readonly>
     <div id="game_info_flexbox">
         <div id="gamemode_value_div">
         <label for="gamemode" class="small">Gamemode<br></label>
         <select name="gamemode" id="gamemode_select">
-            <option value="First to [value] clicks">First to [value] clicks</option>
-            <option value="Best top speed in [value]s">Best top speed in [value]s</option>
+            <option value="First to [value] clicks">First to <span id="select_first_to_value">50</span> clicks</option>
+            <option value="Best top speed in [value]s">Best top speed in <span id="select_best_top_value">10</span>s</option>
         </select>
         <br>
         <label for="value" class="small">Value<br></label>
@@ -44,9 +44,9 @@
             <div class="little_box_title">
                 <p>Joined Players</p>
             </div>
-            <p id="player1_text">Loading...</p>
-            <p id="player2_text">Waiting for player...</p>
-        </div>
+            <div id="player1_user_span" class="leaderboard_item"><p id="player1_text">Loading...</p></div>
+            <div id="player2_user_span" class="leaderboard_item"><p id="player2_text">Waiting for player...</p></div>
+            </div>
 
     </div>
     <div id="start_game_button_div">
@@ -60,7 +60,7 @@
 {% block scripts %}
 <script>
     const game_id = "{{ game_id }}";
-    const user_id = "{{user.id}}";
+    const default_pfp = "{% static 'images/default_pfp.jpg' %}";
 </script>
 
 <script src="{% static 'js/session.js' %}"></script>

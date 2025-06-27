@@ -14,11 +14,6 @@
         <h1 id="login_text" class="title">Login</h1>
         <form id="auth_form" method="post" action="{% url 'login:login' %}">
             {% csrf_token %}
-
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-
             <div class="login_item">
             <label for="id_username" class="small">Username<br></label>
             <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
@@ -42,3 +37,36 @@
 {% endblock %}
 
 
+{% block scripts %}
+<script>
+    const profile_id = "{{profile_id}}";
+    
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-right",
+        "timeOut": "5000"
+    };
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'debug' %}
+                toastr.info("{{ message|escapejs }}");
+            {% elif message.tags == 'info' %}
+                toastr.info("{{ message|escapejs }}");
+            {% elif message.tags == 'success' %}
+                toastr.success("{{ message|escapejs }}");
+            {% elif message.tags == 'warning' %}
+                toastr.warning("{{ message|escapejs }}");
+            {% elif message.tags == 'error' %}
+                toastr.error("{{ message|escapejs }}");
+            {% else %}
+                toastr.info("{{ message|escapejs }}");
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+</script>
+
+
+{% endblock %}

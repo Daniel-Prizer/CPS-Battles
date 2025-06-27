@@ -33,7 +33,7 @@ a {
     max-height: fit-content;
     margin-left: auto;
     margin-right: auto;
-    border-radius: 20%;
+    border-radius: 20px/20px;
     background-color: #34495E;
 }
 .emoji {
@@ -58,7 +58,12 @@ a {
     margin-right: 5px
 }
 
-
+.close_button {
+    position: relative;
+    top: -30px;
+    right: -53%;
+    margin-bottom: -50px;
+}
 
 
 /* --------------------------- HEADER --------------------------- */
@@ -78,7 +83,7 @@ a {
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
     justify-content: center;
-    border-radius: 999px;
+    border-radius: 15px/15px;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -92,6 +97,13 @@ a {
     color: rgb(154, 154, 154);
 }
 
+.flexbox_column_center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto
+}
 
 /* --------------------------- HOMEPAGE --------------------------- */
 .cps_button {
@@ -103,7 +115,7 @@ a {
     padding-bottom: 26%;
     font-size: 3vw;
     font-family: 'Poppins', sans-serif;
-    border-radius: 100px;
+    border-radius: 25px/25px;
     transition: 0.05s;
 }
 .cps_button:active {
@@ -140,7 +152,7 @@ a {
     padding-right: 15%;
     padding-top: 10%;
     padding-bottom: 10%;
-    border-radius: 50px;
+    border-radius: 15px/15px;
     font-family: 'Poppins', sans-serif;
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }
@@ -228,6 +240,8 @@ a {
     justify-content: center;
     flex-direction: row;
     gap: 50px;
+    padding-top: 25px;
+    margin-bottom: 25px;
 }
 
 #sharelink_text {
@@ -243,6 +257,7 @@ a {
     padding-right: 2%;
     margin-top: 2%;
     border-radius: 5%/10%;
+    min-width: 900px;
 }
 
 #copy_link_button {
@@ -288,6 +303,13 @@ a {
 
 #joined_players_div {
     border-radius: 15%/15%;
+    min-width: 200px;
+    margin-right: 0px;
+}
+#gamemode_info_div {
+    width: 250px;
+    margin-left: 75px;
+    border-radius: 6%/9%;
 }
 
 .little_box_title {
@@ -296,7 +318,14 @@ a {
     margin: 0%
 }
 
-
+@media (max-width: 950px) {
+    #gamemode_info_div {
+        display: none;
+    }
+    #pregame_box {
+        min-width: 200px;
+    }
+}
 
 /* --------------------------- GAMEPLAY --------------------------- */
 #player_info_flexbox {
@@ -304,7 +333,14 @@ a {
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    gap: 50px;
+    text-align: center;
+    gap: 200px;
+}
+
+.gameplay_player_name {
+    font-size: large;
+    width: 120px;
+    height: 30px
 }
 
 .player_progress_div_bg {
@@ -385,18 +421,18 @@ a {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-/*     background-color: purple; */
+    /* background-color: purple; */
 }
 
 #profile_user_info_left {
     margin-left: 20%;
-/*     background-color: green; */
+    /* background-color: green; */
 
 }
 
 #profile_user_info_right {
     margin-right: 18%;
-/*     background-color: red; */
+    /* background-color: red; */
 }
 
 #username_div {
@@ -405,7 +441,7 @@ a {
     padding-bottom: 7%;
     width: 470px;
     height: 50px;
-/*     background-color: blue; */
+    /* background-color: blue; */
     overflow: hidden;
     text-wrap: nowrap;
     text-overflow: ellipsis;
@@ -415,7 +451,7 @@ a {
     margin-top: 4%;
     width: 600px;
     height: 200px;
-/*     background-color: orange; */
+    /* background-color: orange; */
     text-wrap: pretty;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -454,7 +490,7 @@ a {
     flex-direction: row;
     margin-right: 7%;
     background-color: #34495E;
-    border-radius: 5%/20%;
+    border-radius: 15px/20px;
     
 }
 .win_text {
@@ -489,7 +525,37 @@ a {
     padding: 0px;
     margin-bottom: 12px;
 }
-@media (max-width: 1350px) {
+
+
+@media (min-width: 1800px) {
+    #username_div {
+        margin-left: 42%;
+    }
+
+}
+
+@media (min-width: 2000px) {
+    #username_div {
+        margin-left: 50%;
+    }
+
+}
+
+
+@media (min-width: 2300px) {
+    #username_div {
+        margin-left: 75%;
+    }
+
+}
+
+@media (max-width: 750px) {
+    #bio_div {
+        width: 250px;
+    }
+}
+
+@media (max-width: 1350px) or (min-width: 2500px) {
     #user_info_flexbox {
     flex-direction: column;
     margin-top: 7%
@@ -595,7 +661,7 @@ a {
     padding-left: 50px;
     padding-top: 20px;
     padding-bottom: 30px;
-    border-radius: 6%/7%;
+    border-radius: 15px/15px;
     min-height: 610px;
 }
 
@@ -640,3 +706,44 @@ a {
     background-color: #404040;
     color: rgb(154, 154, 154);
 }
+
+
+@media (max-width: 775px) {
+    #leaderboard_main_box {
+    border-radius: 12%/7%;
+    }
+
+    #leaderboard_list {
+    padding-left: 10px;
+    }
+
+    #leaderboard_titles {
+        padding-left: 10px;
+    }
+
+    .pos_item {
+        min-width: 80px;
+    }
+
+    .speed_item {
+        min-width: 100px;
+    }
+
+    .user_item {
+        width: 125px;
+    }
+
+    .horizontal_thin_dark_bar {
+    width: 100%+60px;
+    margin-left: -60px;
+    margin-top: -10px;
+    }
+    .pagination {
+    margin: auto;
+    width: 100%;
+    margin-right: 25px;
+    margin-left: -25px;
+    margin-top: 30px;
+    }
+}
+

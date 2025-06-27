@@ -62,6 +62,13 @@ const set_timers = () => {
             }
         }, 500);
 
+    // reset cps to 0 every 5 seconds so the cps doesn't stagnate over a long period of time
+    setInterval(() => {
+        counter = 0;
+        cps = 0;
+        firstClick = null;
+    }, 5083);
+
     // update game information, check if player has won and refresh co-op click counter
     game_refresh_interval = setInterval(() => {
         // send current info
@@ -415,6 +422,7 @@ const initialize_game = () => {
 
 // function for the cps button
 const click = () => {
+    currentClick = new Date().getTime();
     // add to the click amount variable
     counter++
     // remove from the click remaining variable
@@ -430,18 +438,19 @@ const click = () => {
         firstClick = new Date().getTime();
         document.getElementById("cps").innerText = "clicks per second: "+ 1.00
     }
-    // if the click counter is less than 3 balance the clicks so users dont exploit the first few clicks to set a huge record. 
-    else if (counter<3) {
-        currentClick = new Date().getTime();
+    // if the click counter is less than 4 balance the clicks so users dont exploit the first few clicks to set a huge record. 
+    else if (counter<4) {
         cps = ((counter / (currentClick-firstClick))*1000)
-        if (cps > 8) {
+        if (cps > 15) {
+            cps = cps-12
+        }
+        else if (cps > 8) {
             cps = cps-6
-        }        
+        }         
         document.getElementById("cps").innerText = "clicks per second: " + Math.round(cps*100)/100
         // attempt to set the users record CPS if applies.
         setRecord(cps)
     } else { // if this is just a regular click somewhere inbetween change the cps accordingly and set the clicks remaining
-        currentClick = new Date().getTime();
         cps = ((counter / (currentClick-firstClick))*1000)
         document.getElementById("cps").innerText = "clicks per second: " + Math.round(cps*100)/100
         // attempt to set the users record CPS if applies.

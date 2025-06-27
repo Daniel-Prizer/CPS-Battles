@@ -7,7 +7,7 @@ import json
 
 
 def users_list(request):
-    users = Users.objects.all().order_by('-top_cps').values('username', 'flag_emoji', 'avatar', 'top_cps')
+    users = Users.objects.all().order_by('-top_cps').values("id",'username', 'flag_emoji', 'avatar', 'top_cps')
     paginator = Paginator(users, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

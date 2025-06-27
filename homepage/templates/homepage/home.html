@@ -38,6 +38,34 @@
 
 
 {% block scripts %}
-
 <script src="{% static 'js/homepage.js' %}"></script>
+
+<script>
+    
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-right",
+        "timeOut": "5000"
+    };
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'debug' %}
+                toastr.info("{{ message|escapejs }}");
+            {% elif message.tags == 'info' %}
+                toastr.info("{{ message|escapejs }}");
+            {% elif message.tags == 'success' %}
+                toastr.success("{{ message|escapejs }}");
+            {% elif message.tags == 'warning' %}
+                toastr.warning("{{ message|escapejs }}");
+            {% elif message.tags == 'error' %}
+                toastr.error("{{ message|escapejs }}");
+            {% else %}
+                toastr.info("{{ message|escapejs }}");
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+</script>
 {% endblock %}
