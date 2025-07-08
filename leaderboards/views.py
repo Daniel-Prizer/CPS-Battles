@@ -7,6 +7,7 @@ import json
 
 
 def users_list(request):
+    # uses django pagination to send the page and the users on said page.
     users = Users.objects.all().order_by('-top_cps').values("id",'username', 'flag_emoji', 'avatar', 'top_cps')
     paginator = Paginator(users, 10)
     page_number = request.GET.get('page')

@@ -15,11 +15,17 @@ api = DataLayerAPI()
 
 def get_user(request, user_id):
     user = api.get_user_by_id(user_id)
+    # send the user images as urls and not whatever object django uses (incompatible with json):
     user['avatar'] = user['avatar'].url if user['avatar'] else ''
     user['banner'] = user['banner'].url if user['banner'] else ''
     return JsonResponse(user)
 
+
+# this view is usually used for editing the top_cps etc
 def edit_user_DLAPI(request, user_id):
+    # make sure that the user_id input isnt being manipulated, only allow editing your own user.
+    if int(request.user.id) != int(user_id):
+        return JsonResponse({"error": "You can only edit your own user"}, status=403)
      # expects edit field to be one of the ones listed under api.py
     if request.method == "POST":
         data = json.loads(request.body)
@@ -30,7 +36,7 @@ def edit_user_DLAPI(request, user_id):
     else:
         return JsonResponse({"error": "Only POST allowed"}, status=405)
 
-
+# this view is used specifically for the profile edit
 def edit_user(request):
     if request.method == "POST":
         user = request.user

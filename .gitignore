@@ -185,4 +185,4 @@ node_modules/.package-lock.json
 
 # Image folders
 profile_images/
-static/twemoji/svg/
+static/twemoji/

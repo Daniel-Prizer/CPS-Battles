@@ -5,12 +5,13 @@ from DataLayer.API import DataLayerAPI
 # Create your views here.
 def homepage(request):
 
+    # This view creates a sort of fake "game" to set a record for a person if they set one using the cps button on the homepage 
+
     if request.method == "POST":
         api = DataLayerAPI()
         data = json.loads(request.body)
         top_cps = data.get("top_cps")
-        username = request.user.username
-        user_id = api.get_user_by_username(username)["id"]
+        user_id = request.user.id
 
         game = api.register_game(
             player_one = user_id,
@@ -19,6 +20,7 @@ def homepage(request):
             player_two_cps = None,
             mode = "Homepage",
             )
+    
         api.edit_user(user_id,"top_cps_game_id",game["game_id"])
         api.edit_user(user_id,"top_cps",top_cps)
     

@@ -38,7 +38,7 @@ from users.models import Users
 
 
 
-# Helper to generate random usernames and bios
+# Helper to generate random usernames and bios (CHATGPT)
 def random_username():
     return ''.join(random.choices(string.ascii_lowercase, k=8))
 

@@ -22,11 +22,16 @@
 <body data-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
     <header>
         <div class="header_flexbox">
-        <button type="button" id="home_button" class="header_button">CPS BATTLES</button>
+        <button type="button" id="home_button"><img id="header_logo" src="{% static 'images/cps_battles.png' %}" alt="CPS Battles Logo"></button>
         <button type="button" id="leaderboards_button" class="header_button">LEADERBOARDS</button>
 
         {% if user.is_authenticated %}
-            <button type="button" id="profile_button" class="header_button">PROFILE</button>
+            <div class="dropdown" style="float:left;">
+                <button type="button" id="profile_button" class="header_button">PROFILE</button>
+                <div class="dropdown-content" style="left:0;">
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
         {% else %}
             <button type="button" id="login_button" class="header_button">LOGIN</button>
         {% endif %}

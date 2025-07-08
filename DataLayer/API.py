@@ -1,5 +1,5 @@
 from DataLayer.users_dl import users_dl
-from DataLayer.users_dl import games_dl
+from DataLayer.games_dl import games_dl
 from typing import Union
 from django.core.files.uploadedfile import UploadedFile
 class DataLayerAPI:
