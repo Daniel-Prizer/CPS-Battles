@@ -1,3 +1,4 @@
+from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
@@ -9,6 +10,44 @@ import json
 
 
 api = DataLayerAPI()
+
+
+@require_http_methods(["GET", "POST"])
+def game_detail_api(request, game_id):
+    if request.method == "GET":
+        game = api.get_game(game_id)
+        return JsonResponse(game)
+    if request.method == "POST":
+        game_data = api.get_game(game_id)
+        data = json.loads(request.body)
+        # expects edit field to be one of the ones listed under api.py
+        edit_field = data.get("edit_field")
+        edit_replacement = data.get("edit_replacement")
+        # if the person trying to edit the game isnt one of the players, do not edit.
+        if game_data["player_two"]:
+            if int(game_data["player_two"]) != int(request.user.id) and int(game_data["player_one"]) != int(request.user.id):
+                return JsonResponse({"error": "Only players registered to the game can edit the game"}, status=403)
+        else:
+            if int(game_data["player_one"]) != int(request.user.id):
+                return JsonResponse({"error": "Only players registered to the game can edit the game"}, status=403)
+        # dont allow the players to be changed after players are already assigned to the game
+        if (game_data["player_two"] and game_data["player_one"]) and (edit_field == "player_one" or edit_field == "player_Two"):
+            return JsonResponse({"error": "The game already has assigned players"}, status=403)
+        # allow request to use current user as a replacement
+        if edit_replacement == "current_user":
+            edit_replacement = request.user.id
+        return JsonResponse(api.edit_game(game_id, edit_field, edit_replacement))
+    else:
+        return JsonResponse({"error": "Only POST allowed"}, status=405)
+
+def games_for_user_api(request):
+    user_id = request.GET.get("user_id")
+    if not user_id:
+        return JsonResponse({"error": "user_id query parameter required"}, status=400)
+    games = api.get_games_for_user_id(user_id)
+    return JsonResponse(games, safe=False)
+
+
 
 def create_game(request):
     # dont allow the creation of a game unless the user is logged in
@@ -49,36 +88,3 @@ def join_game(request, game_id):
         return render(request, 'games/gameplay.html', {"game_id": game_id})
 
     return render(request, 'games/session.html', {"game_id": game_id})
-
-def get_game(request, game_id):
-    game = api.get_game(game_id)
-    return JsonResponse(game)
-
-def get_games_for_user(request, user_id):
-    game = api.get_games_for_user_id(user_id)
-    return JsonResponse(game, safe=False)
-
-
-def edit_game(request, game_id):
-    # expects edit field to be one of the ones listed under api.py
-    if request.method == "POST":
-        game_data = api.get_game(game_id)
-        data = json.loads(request.body)
-        edit_field = data.get("edit_field")
-        edit_replacement = data.get("edit_replacement")
-        # if the person trying to edit the game isnt one of the players, do not edit.
-        if game_data["player_two"]:
-            if int(game_data["player_two"]) != int(request.user.id) and int(game_data["player_one"]) != int(request.user.id):
-                return JsonResponse({"error": "Only players registered to the game can edit the game"}, status=403)
-        else:
-            if int(game_data["player_one"]) != int(request.user.id):
-                return JsonResponse({"error": "Only players registered to the game can edit the game"}, status=403)
-        # dont allow the players to be changed after players are already assigned to the game
-        if (game_data["player_two"] and game_data["player_one"]) and (edit_field == "player_one" or edit_field == "player_Two"):
-            return JsonResponse({"error": "The game already has assigned players"}, status=403)
-        # allow request to use current user as a replacement
-        if edit_replacement == "current_user":
-            edit_replacement = request.user.id
-        return JsonResponse(api.edit_game(game_id, edit_field, edit_replacement))
-    else:
-        return JsonResponse({"error": "Only POST allowed"}, status=405)

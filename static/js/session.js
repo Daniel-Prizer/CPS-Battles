@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById("start_game").onclick = () => {
         // update db, set the current game to started
         // eslint-disable-next-line no-undef
-        fetch(`/api/game/${game_id}/`, {
+        fetch(`/api/games/${game_id}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -180,12 +180,12 @@ const change_tutorial = (title_input, value_input) => {
 // check for joined players, send and receive game state on an interval:
 setInterval(() => {
     // eslint-disable-next-line no-undef
-    fetch(`/api/get_game/${game_id}/`)
+    fetch(`/api/games/${game_id}/`)
     .then(response1 => response1.json())
     .then(data1 => {
         // if the db has a player_one but we dont have one locally
         if (data1.player_one && !(player1)) {
-            fetch(`/api/get_user/${data1.player_one}/`)
+            fetch(`/api/users/${data1.player_one}/`)
             .then(response2 => response2.json())
             .then(data2 => {
                 // set player1 as a local variable and set the users name in the appropriate place with their emojis
@@ -207,7 +207,7 @@ setInterval(() => {
         }
         // if the db has a player_two but we dont have one locally
         if (data1.player_two && !(player2)) {
-            fetch(`/api/get_user/${data1.player_two}/`)
+            fetch(`/api/users/${data1.player_two}/`)
             .then(response3 => response3.json())
             .then(data3 => {
                 // set player2 as a local variable and set the users name in the appropriate place with their emojis
@@ -279,14 +279,14 @@ setInterval(() => {
         if (data1.started) {
             // if the game is set as started, redirect
             // eslint-disable-next-line no-undef
-            window.location.href = `/game/${game_id}/play`
+            window.location.href = `/games/${game_id}/play`
         }
 
     });
     // if the current user is player1 and we need to send the selected game to the other user
     if ((typeof(player1) !== "undefined") && user_id == player1.id && send_tutorial_to_player2) {
         // set the game mode in db
-        fetch(`/api/game/${game_id}/`, {
+        fetch(`/api/games/${game_id}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -13,28 +13,29 @@ api = DataLayerAPI()
 
 # Create your views here.
 
-def get_user(request, user_id):
-    user = api.get_user_by_id(user_id)
-    # send the user images as urls and not whatever object django uses (incompatible with json):
-    user['avatar'] = user['avatar'].url if user['avatar'] else ''
-    user['banner'] = user['banner'].url if user['banner'] else ''
-    return JsonResponse(user)
 
-
-# this view is usually used for editing the top_cps etc
-def edit_user_DLAPI(request, user_id):
-    # make sure that the user_id input isnt being manipulated, only allow editing your own user.
-    if int(request.user.id) != int(user_id):
-        return JsonResponse({"error": "You can only edit your own user"}, status=403)
-     # expects edit field to be one of the ones listed under api.py
-    if request.method == "POST":
+def user_detail_api(request, user_id):
+    # get user
+    if request.method == "GET":
+        user = api.get_user_by_id(user_id)
+        # send the user images as urls and not whatever object django uses (incompatible with json):
+        user['avatar'] = user['avatar'].url if user['avatar'] else ''
+        user['banner'] = user['banner'].url if user['banner'] else ''
+        return JsonResponse(user)
+    # edit user
+    elif request.method == "POST":
+        # make sure that the user_id input isnt being manipulated, only allow editing your own user.
+        if int(request.user.id) != int(user_id):
+            return JsonResponse({"error": "You can only edit your own user"}, status=403)
         data = json.loads(request.body)
+        # expects edit field to be one of the ones listed under api.py
         edit_field = data.get("edit_field")
         edit_replacement = data.get("edit_replacement")
         api.edit_user(user_id, edit_field, edit_replacement)
         return JsonResponse({}, status=200)
     else:
-        return JsonResponse({"error": "Only POST allowed"}, status=405)
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+
 
 # this view is used specifically for the profile edit
 def edit_user(request):

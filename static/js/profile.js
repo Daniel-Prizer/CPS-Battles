@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // get the current user (viewer):
     if (typeof user_id !== 'undefined') {
-    fetch(`/api/get_user/${user_id}/`)
+    fetch(`/api/users/${user_id}/`)
         .then(response => response.json())
         .then(data => {
             if (profile_id == data.id) {
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // get the profile user (host):
-    fetch(`/api/get_user/${profile_id}/`)
+    fetch(`/api/users/${profile_id}/`)
         .then(response => response.json())
         .then(data => {
             console.log(data)
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             // Get game history for user and populate game history
-            fetch(`/api/get_games_for_user/${profile_id}/`)
+            fetch(`/api/games/?user_id=${profile_id}`)
             .then(response => response.json())
             .then(game_data => {
                 // for each game received from server
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         win = true
                     }
                     // fetch the opponent
-                    fetch(`/api/get_user/${opponentid}/`)
+                    fetch(`/api/users/${opponentid}/`)
                     .then(response => response.json())
                     .then(opponent_data => {
                         // now we have all the data, we can create the game history box in html

@@ -75,7 +75,7 @@ const set_timers = () => {
         // send info for player one
         if (game_base_state.player_one == user_id) {
             // update clicks
-            fetch(`/api/game/${game_id}/`, {
+            fetch(`/api/games/${game_id}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const set_timers = () => {
                 })
             })
             // update cps
-            fetch(`/api/game/${game_id}/`, {
+            fetch(`/api/games/${game_id}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ const set_timers = () => {
         } // send info for player two 
         else {
             // update clicks
-            fetch(`/api/game/${game_id}/`, {
+            fetch(`/api/games/${game_id}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ const set_timers = () => {
                 })
             })
             // update cps
-            fetch(`/api/game/${game_id}/`, {
+            fetch(`/api/games/${game_id}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const set_timers = () => {
             })  
         }
         // get recent info and update DOM
-        fetch(`/api/get_game/${game_id}/`)
+        fetch(`/api/games/${game_id}/`)
         .then(response => response.json())
         .then(data => {
             if (mode_type == "first to") {
@@ -153,7 +153,7 @@ const set_timers = () => {
 
 const check_and_set_win_state = () => {
     // get the game state from database
-    fetch(`/api/get_game/${game_id}/`)
+    fetch(`/api/games/${game_id}/`)
         .then(response => response.json())
         .then(data => {
             // if there is a winning player, and it is the current playerÞ
@@ -181,7 +181,7 @@ const check_and_set_win_state = () => {
                             document.getElementById("win_status").textContent = "You lost."
                         }
                         document.getElementsByClassName("overlay")[0].style.display = "flex"
-                        fetch(`/api/game/${game_id}/`, {
+                        fetch(`/api/games/${game_id}/`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ const check_and_set_win_state = () => {
                         }
                         document.getElementsByClassName("overlay")[0].style.display = "flex"
                         // update win status in db
-                        fetch(`/api/game/${game_id}/`, {
+                        fetch(`/api/games/${game_id}/`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ const check_and_set_win_state = () => {
                             document.getElementById("win_status").textContent = "You lost."
                         }
                         document.getElementsByClassName("overlay")[0].style.display = "flex"
-                        fetch(`/api/game/${game_id}/`, {
+                        fetch(`/api/games/${game_id}/`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -238,7 +238,7 @@ const check_and_set_win_state = () => {
                             document.getElementById("win_status").textContent = "You lost."
                         }
                         document.getElementsByClassName("overlay")[0].style.display = "flex"
-                        fetch(`/api/game/${game_id}/`, {
+                        fetch(`/api/games/${game_id}/`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -254,9 +254,9 @@ const check_and_set_win_state = () => {
                 }
             }
             // if the mode is first to and current user reaches 0 clicks remaining, register them as the winner in db
-            else if (mode_type == "first to" && clicks_remaining == 0) {
+            else if (mode_type == "first to" && clicks_remaining < 1) {
                 document.getElementsByClassName("overlay")[0].style.display = "flex"
-                    fetch(`/api/game/${game_id}/`, {
+                    fetch(`/api/games/${game_id}/`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -284,7 +284,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     // initially disable the cps button while the countdown goes down.
     document.getElementsByClassName("cps_button")[0].disabled = true
-    fetch(`/api/get_game/${game_id}/`)
+    fetch(`/api/games/${game_id}/`)
     .then(response => response.json())
     .then(data => {
         // get the initial game details, mode and players etc.
@@ -337,7 +337,7 @@ const initialize_game = () => {
     }
     
     // write the usernames and their flags below the progress bars:
-    fetch(`/api/get_user/${game_base_state.player_one}/`)
+    fetch(`/api/users/${game_base_state.player_one}/`)
             .then(response => response.json())
             .then(data => {
                 let player1 = data
@@ -349,7 +349,7 @@ const initialize_game = () => {
                     base: '/static/twemoji/',
                 });
             });
-    fetch(`/api/get_user/${game_base_state.player_two}/`)
+    fetch(`/api/users/${game_base_state.player_two}/`)
             .then(response => response.json())
             .then(data => {
                 let player2 = data
@@ -367,7 +367,7 @@ const initialize_game = () => {
     const countdown_timer = setInterval(() => {
         // if no local start time exists:
         if (start_time == undefined || start_time == null) {
-            fetch(`/api/get_game/${game_id}/`)
+            fetch(`/api/games/${game_id}/`)
             .then(response => response.json())
             .then(data => {
                 if (data.timestamp) {
@@ -376,7 +376,7 @@ const initialize_game = () => {
                 } else { // if it doesnt exist do:
                     // player 1 sets the timestamp/start_time
                     if ((start_time == undefined || start_time == null) && user_id == game_base_state.player_one) {
-                        fetch(`/api/game/${game_id}/`, {
+                        fetch(`/api/games/${game_id}/`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -426,7 +426,9 @@ const click = () => {
     // add to the click amount variable
     counter++
     // remove from the click remaining variable
-    clicks_remaining--
+    if (clicks_remaining > 0) {
+        clicks_remaining--
+    }
     // check if someone has won yet
     check_and_set_win_state()
     // set the clicks_remaining text in the DOM if the mode applies
@@ -472,13 +474,13 @@ function setRecord(cps) {
     }
     
     // compare with global top_cps
-    fetch(`/api/get_user/${user_id}/`)
+    fetch(`/api/users/${user_id}/`)
     .then(response => response.json())
     .then(data => {
         // if the users current game top_cps is higher than the users historic top_cps for all games, set a record in the db
         if (top_cps > data.top_cps) {
             // set the cps number
-            fetch(`/api/user/${user_id}/`, {
+            fetch(`/api/users/${user_id}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -490,7 +492,7 @@ function setRecord(cps) {
                 })
             })
             // set the game id to link the record
-            fetch(`/api/user/${user_id}/`, {
+            fetch(`/api/users/${user_id}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

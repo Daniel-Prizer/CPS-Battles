@@ -176,7 +176,7 @@ cython_debug/
 .vscode
 
 # Node
-node_modules/
+node_modules
 package-lock.json
 package.json
 eslint.config.mjs

@@ -15,7 +15,6 @@ def country_code_to_flag(country_code):
     return chr(ord(country_code[0].upper()) + 127397) + chr(ord(country_code[1].upper()) + 127397)
 
 
-# Create your views here.
 def loginPage(request):
     if request.method == "POST":
         username = request.POST.get("username")
