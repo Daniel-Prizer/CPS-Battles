@@ -1,6 +1,6 @@
 <img src="static/images/cps_battles.png" alt="CPS Battles Logo" width="450"/>
 This project requires pip packages listed in requirements.txt,<br/>
-please use pip to install them: `pip install -r requirements.txt`<br/>
+please use pip to install them: pip install -r requirements.txt<br/>
 ^^ It is recommended that you use a python virtual environment.<br/>
 If you are missing pip, please follow the instructions here: https://pip.pypa.io/en/stable/installation/<br/>
 <br/>
@@ -10,11 +10,9 @@ and place it here: .../static/twemoji/svg<br/>
 <br/>
 The project uses a postgres database to run, please create one and configure CPS_Battles/settings.py properly.<br/>
 Then to set the database up; delete all of the migration files except __init__.py and run the following commands in the repository folder:<br/>
-```cmd
-python manage.py makemigrations
-python manage.py migrate
-```
-<br/>
+python manage.py makemigrations<br/>
+python manage.py migrate<br/>
+
 
 ## Web App Showcase
 If I am not currently hosting the website or you don't want to set it up yourself,<br/>
