@@ -24,12 +24,12 @@ AUTH_USER_MODEL = 'users.Users'
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-dz9*rw!yr3wh7i=mqi9k%u4*(vj8#(_xe$+b4zcm3@emmg4#5s'
+SECRET_KEY = os.environ.get("SECRET_KEY"),
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cpsbattles.azurewebsites.net','localhost']
 
 
 # Application definition
