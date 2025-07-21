@@ -1,39 +1,45 @@
-name: Build and deploy Python app to Azure Web App - CPSBattles
+# .github/workflows/azure-webapp.yml
+name: Build & deploy Django (CPSBattles) to Azure Web App
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write            # needed for azure/login OIDC
+
+env:
+  AZURE_WEBAPP_NAME: CPSBattles
+  PYTHON_VERSION: '3.11'
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    # 1 ‒ checkout -----------------------------------------------------------
+    - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+    # 2 ‒ (optional) local smoke-test of your code ---------------------------
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install deps & (optionally) run tests
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        # python manage.py test          # <-- if you have tests
+        python manage.py collectstatic --noinput || true
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EBF86B1B0D2546BD878FE0170AE6603D }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F54121D77BE34871BB250962034C2503 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F3951AF1A3A04B87B4D17F4C816B86E0 }}
+    # 3 ‒ archive the source (zip-deploy works better than shipping a folder)
+    - name: Make deployment ZIP
+      run: |
+        zip -r ${{ github.workspace }}/deploy.zip . -x '*.git*' '**/__pycache__/**'
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'CPSBattles'
-          slot-name: 'Production'
-          package: .
+    # 4 ‒ login with OIDC (no secret JSON needed)
+    - uses: azure/login@v2
+      with:
+        client-id:      ${{ secrets.AZUREAPPSER
