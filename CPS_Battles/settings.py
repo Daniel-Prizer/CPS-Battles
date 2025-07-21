@@ -146,3 +146,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR
+
+
+if os.environ.get("RUN_COLLECTSTATIC") == "1":
+    import subprocess
+    import logging
+    try:
+        logging.warning("Running collectstatic during startup...")
+        subprocess.check_call(["python", "manage.py", "collectstatic", "--noinput"])
+    except Exception as e:
+        logging.error(f"collectstatic failed: {e}")
