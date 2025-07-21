@@ -18,6 +18,9 @@ LOGOUT_REDIRECT_URL = '/login/'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Add this
+
 AUTH_USER_MODEL = 'users.Users'
 
 # Quick-start development settings - unsuitable for production
@@ -56,7 +59,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'CPS_Battles.urls'
 
@@ -74,12 +80,6 @@ TEMPLATES = [
             ],
         },
     },
-]
-
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
 ]
 
 WSGI_APPLICATION = 'CPS_Battles.wsgi.application'
