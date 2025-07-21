@@ -84,7 +84,7 @@ STATICFILES_DIRS = [
 ]
 
 WSGI_APPLICATION = 'CPS_Battles.wsgi.application'
-
+ENABLE_ORYX_BUILD = True
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -94,10 +94,10 @@ WSGI_APPLICATION = 'CPS_Battles.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
+        'NAME': os.environ.get("DB_NAME"),
+        'USER': os.environ.get("DB_USER"),
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'HOST': os.environ.get("DB_HOST"),
         'PORT': '5432',
     }
 }
