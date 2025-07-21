@@ -186,3 +186,6 @@ node_modules/.package-lock.json
 # Image folders
 profile_images/
 static/twemoji/
+
+# Azure static folder
+staticfiles/
