@@ -91,6 +91,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'CPS_Battles.wsgi.application'
+ENABLE_ORYX_BUILD = True
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
