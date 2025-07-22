@@ -38,10 +38,10 @@ AUTH_USER_MODEL = 'users.Users'
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = ['cpsbattles.azurewebsites.net','localhost']
-
+CSRF_TRUSTED_ORIGINS = ['https://cpsbattles.azurewebsites.net']
 
 # Application definition
 
