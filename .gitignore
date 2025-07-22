@@ -185,7 +185,7 @@ node_modules/.package-lock.json
 
 # Image folders
 profile_images/
-static/twemoji/
+#static/twemoji/  >- Required to sync this so that the azure site has access
 
 # Azure static folder
 staticfiles/

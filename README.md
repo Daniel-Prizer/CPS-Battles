@@ -5,12 +5,11 @@ please use pip to install them: pip install -r requirements.txt<br/>
 If you are missing pip, please follow the instructions here: https://pip.pypa.io/en/stable/installation/<br/>
 <br/>
 Folders with large amounts of images are gitignored to not consume cloud space,<br/>
-thus to get flag emojis to work, please download the svg folder from: https://github.com/twitter/twemoji/tree/master/assets<br/>
+thus to get flag emojis to work (you may not need to do this, i reenabled the twemoji images for the azure server I am using during a certain period), please download the svg folder from: https://github.com/twitter/twemoji/tree/master/assets<br/>
 and place it here: .../static/twemoji/svg<br/>
 <br/>
 The project uses a postgres database to run, please create one and configure CPS_Battles/settings.py properly.<br/>
-Then to set the database up; delete all of the migration files except __init__.py and run the following commands in the repository folder:<br/>
-python manage.py makemigrations<br/>
+Then to set the database up:
 python manage.py migrate<br/>
 
 
