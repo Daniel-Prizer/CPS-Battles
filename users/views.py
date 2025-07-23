@@ -3,7 +3,6 @@ from django.shortcuts import redirect
 from DataLayer.API import DataLayerAPI
 from django.http import JsonResponse
 from django.contrib import messages
-import os
 from io import BytesIO
 from PIL import Image
 from django.core.files.base import ContentFile
@@ -61,8 +60,8 @@ def edit_user(request):
                 img = img.resize((512, 512), Image.LANCZOS)
 
                 # Remove old image file if exists
-                if user.avatar and os.path.isfile(user.avatar.path):
-                    os.remove(user.avatar.path)
+                if user.avatar:
+                    user.avatar.delete(save=False)
 
                 # Save new image to user.avatar
                 img_io = BytesIO()
@@ -104,8 +103,8 @@ def edit_user(request):
                     return redirect('user_profile', user_id=user.id)
 
                 # Remove old file if exists
-                if user.banner and os.path.isfile(user.banner.path):
-                    os.remove(user.banner.path)
+                if user.banner:
+                    user.banner.delete(save=False)
 
                 # Assign image to field (without calling save yet)
                 img_io = BytesIO()

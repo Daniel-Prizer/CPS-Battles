@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 // When page has loaded
 document.addEventListener("DOMContentLoaded", function () {
-    console.log(page_obj, users_json)
     let counter = 0
     users_json.forEach(user => {
         counter++
