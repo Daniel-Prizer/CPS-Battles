@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "whitenoise.runserver_nostatic",
+    "storages",
     'login',
     'homepage',
     'users',
@@ -148,6 +149,11 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# User uploaded MEDIA
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+AZURE_ACCOUNT_NAME = 'cpsbattlesstorage'
+AZURE_ACCOUNT_KEY = os.environ.get("STORAGE_KEY")
+AZURE_CONTAINER = 'media'
+AZURE_CUSTOM_DOMAIN = 'cpsbattles.blob.core.windows.net'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR
+MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
