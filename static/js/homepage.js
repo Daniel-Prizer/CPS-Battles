@@ -80,8 +80,6 @@ const click = () => {
 
 // once the page has loaded:
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("0.90 "+Date.now())
-
 top_cps = parseFloat(document.getElementById("top_cps").innerHTML)
 // cps button set onclick
 document.getElementsByClassName("cps_button")[0].onclick = function () {

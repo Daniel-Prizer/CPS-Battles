@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(`/api/users/${profile_id}/`)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             // set window title
             document.title = data.username+"'s Profile"
 

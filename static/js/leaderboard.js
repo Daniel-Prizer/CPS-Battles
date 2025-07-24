@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
         counter++
         let pfp = default_pfp;
         if (user.avatar != "") {
-            pfp = user.avatar.startsWith('/media/') ? user.avatar : '/media/' + user.avatar;
-        }
+            pfp = user.avatar
+        };
         document.getElementById("leaderboard_list").insertAdjacentHTML("beforeend", `
     <div class="leaderboard_item">
         <p class="pos_item">${(page_num-1)*(10)+counter}.</p>
