@@ -150,7 +150,7 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # User uploaded MEDIA
-DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+DEFAULT_FILE_STORAGE = 'CPS_Battles.storage_backends.MediaStorage'
 
 AZURE_ACCOUNT_NAME = 'cpsbattlesstorage'
 AZURE_ACCOUNT_KEY = os.environ.get("STORAGE_KEY")

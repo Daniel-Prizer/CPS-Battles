@@ -1,4 +1,3 @@
-# storage_backends.py
 from storages.backends.azure_storage import AzureStorage
 import os
 
