@@ -156,7 +156,7 @@ AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
 
 # If we are running in azure use the env variables, otherwise use local .env variables
 try:
-    from decouple import config
+    from decouple import config # type: ignore
     SECRET_KEY = config('SECRET_KEY')
     DEBUG = config('DEBUG')
     DATABASES = {

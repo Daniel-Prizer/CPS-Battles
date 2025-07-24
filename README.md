@@ -41,3 +41,6 @@ You can also see your game history at the bottom.<br/>
 On the leaderboard you can see which players have clicked the fastest.<br/>
 Click on any username to see their profile and game history.<br/>
 ![Leaderboards video](Readme%20gifs/Leaderboards%20gif.gif)
+
+## Project Report
+Please have a read over 'CPS_Battles - Project Report.docx' if you are interested in the development process! :)

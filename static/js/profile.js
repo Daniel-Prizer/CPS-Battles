@@ -139,14 +139,24 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
-    // parse flag emojis after 2.5secs
+    // parse flag emojis after 1.5secs
     setTimeout(function() {
         twemoji.parse(document.getElementById("game_history"), {
             folder: 'svg',
             ext: '.svg',
             base: '/static/twemoji/',
         });
-    }, 2500);
+    }, 1500);
+
+    // then again (if users pc is slow or bad connection)
+    // parse flag emojis after 4.5secs
+    setTimeout(function() {
+        twemoji.parse(document.getElementById("game_history"), {
+            folder: 'svg',
+            ext: '.svg',
+            base: '/static/twemoji/',
+        });
+    }, 4500);
     
     // set button onclick functions
     document.getElementById("edit_button").onclick = () => {
