@@ -37,15 +37,10 @@ AUTH_USER_MODEL = 'users.Users'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
-# If we are running in azure use the env variables, otherwise use local .env variables
-if os.environ.get("DB_NAME") is None:
-    SECRET_KEY = config('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG")
-# If we are running in azure use the env variables, otherwise use local .env variables
-if os.environ.get("DB_NAME") is None:
-    DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = ['cpsbattles.azurewebsites.net','localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://cpsbattles.azurewebsites.net']
@@ -104,33 +99,16 @@ ENABLE_ORYX_BUILD = True
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-# If we are running in azure use the env variables, otherwise use local .env variables
-if os.environ.get("DB_NAME") is not None:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get("DB_NAME"),
-            'USER': os.environ.get("DB_USER"),
-            'PASSWORD': os.environ.get("DB_PASSWORD"),
-            'HOST': os.environ.get("DB_HOST"),
-            'PORT': '5432',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get("DB_NAME"),
+        'USER': os.environ.get("DB_USER"),
+        'PASSWORD': os.environ.get("DB_PASSWORD"),
+        'HOST': os.environ.get("DB_HOST"),
+        'PORT': '5432',
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': config('DB_NAME'),
-            'USER': config('DB_USER'),
-            'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST'),
-            'PORT': '5432',
-            'OPTIONS': {
-                'sslmode': 'require',
-            }
-        }
-    }
+}
     
 
 
@@ -178,8 +156,31 @@ AZURE_CONTAINER = 'media'
 AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
 
 # If we are running in azure use the env variables, otherwise use local .env variables
-if os.environ.get("DB_NAME") is None:
+try:
+    from decouple import config
+    SECRET_KEY = config('SECRET_KEY')
+    DEBUG = config('DEBUG')
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': '5432',
+            'OPTIONS': {
+                'sslmode': 'require',
+            }
+        }
+    }
     AZURE_ACCOUNT_KEY = config('STORAGE_KEY')
+    print("Local environment detected, proceeding with local settings.py")
+    
+except Exception:
+    print("Cloud environment detected, proceeding with cloud settings.py")
+
+
+
 
 STORAGES = {
     "default": {
