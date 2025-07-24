@@ -149,12 +149,26 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# User uploaded MEDIA
-DEFAULT_FILE_STORAGE = 'CPS_Battles.storage_backends.MediaStorage'
-
+# MEDIA
 AZURE_ACCOUNT_NAME = 'cpsbattlesstorage'
 AZURE_ACCOUNT_KEY = os.environ.get("STORAGE_KEY")
 AZURE_CONTAINER = 'media'
 AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "account_name": AZURE_ACCOUNT_NAME,
+            "account_key": AZURE_ACCOUNT_KEY,
+            "azure_container": AZURE_CONTAINER,
+            "custom_domain": AZURE_CUSTOM_DOMAIN,
+        },
+    },
+    # Static remains default
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    }
+}
 
 MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{AZURE_CONTAINER}/'
