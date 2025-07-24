@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+from decouple import config
 from pathlib import Path
 import os
 LOGIN_REDIRECT_URL = '/'
@@ -36,11 +37,17 @@ AUTH_USER_MODEL = 'users.Users'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
+# If we are running in azure use the env variables, otherwise use local .env variables
+if os.environ.get("DB_NAME") is None:
+    SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG")
+# If we are running in azure use the env variables, otherwise use local .env variables
+if os.environ.get("DB_NAME") is None:
+    DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = ['cpsbattles.azurewebsites.net','localhost', '169.254.129.2']
+ALLOWED_HOSTS = ['cpsbattles.azurewebsites.net','localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://cpsbattles.azurewebsites.net']
 
 # Application definition
@@ -98,18 +105,33 @@ ENABLE_ORYX_BUILD = True
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get("DB_NAME"),
-        'USER': os.environ.get("DB_USER"),
-        'PASSWORD': os.environ.get("DB_PASSWORD"),
-        'HOST': os.environ.get("DB_HOST"),
-        'PORT': '5432',
+# If we are running in azure use the env variables, otherwise use local .env variables
+if os.environ.get("DB_NAME") is not None:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get("DB_NAME"),
+            'USER': os.environ.get("DB_USER"),
+            'PASSWORD': os.environ.get("DB_PASSWORD"),
+            'HOST': os.environ.get("DB_HOST"),
+            'PORT': '5432',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': '5432',
+            'OPTIONS': {
+                'sslmode': 'require',
+            }
+        }
+    }
+    
 
 
 # Password validation
@@ -154,6 +176,10 @@ AZURE_ACCOUNT_NAME = 'cpsbattlesstorage'
 AZURE_ACCOUNT_KEY = os.environ.get("STORAGE_KEY")
 AZURE_CONTAINER = 'media'
 AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+
+# If we are running in azure use the env variables, otherwise use local .env variables
+if os.environ.get("DB_NAME") is None:
+    AZURE_ACCOUNT_KEY = config('STORAGE_KEY')
 
 STORAGES = {
     "default": {

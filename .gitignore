@@ -189,3 +189,6 @@ profile_images/
 
 # Azure static folder
 staticfiles/
+
+# local env
+.env
