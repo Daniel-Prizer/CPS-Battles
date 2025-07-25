@@ -6,6 +6,7 @@ from django.contrib import messages
 from io import BytesIO
 from PIL import Image
 from django.core.files.base import ContentFile
+from django.http import Http404
 import json
 
 api = DataLayerAPI()
@@ -23,7 +24,7 @@ def user_detail_api(request, user_id):
             user['banner'] = user['banner'].url if user['banner'] else ''
             return JsonResponse(user)
         except Exception:
-            return render(request, '404.html', status=404)
+            raise Http404("User not found")
     # edit user
     elif request.method == "POST":
         # make sure that the user_id input isnt being manipulated, only allow editing your own user.

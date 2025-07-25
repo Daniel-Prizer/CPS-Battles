@@ -21,7 +21,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // get the profile user (host):
     fetch(`/api/users/${profile_id}/`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+            window.location.href = '/404/';
+            return;
+            }
+            return response.json();
+        })
         .then(data => {
             // set window title
             document.title = data.username+"'s Profile"
