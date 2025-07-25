@@ -16,11 +16,14 @@ api = DataLayerAPI()
 def user_detail_api(request, user_id):
     # get user
     if request.method == "GET":
-        user = api.get_user_by_id(user_id)
-        # send the user images as urls and not whatever object django uses (incompatible with json):
-        user['avatar'] = user['avatar'].url if user['avatar'] else ''
-        user['banner'] = user['banner'].url if user['banner'] else ''
-        return JsonResponse(user)
+        try:
+            user = api.get_user_by_id(user_id)
+            # send the user images as urls and not whatever object django uses (incompatible with json):
+            user['avatar'] = user['avatar'].url if user['avatar'] else ''
+            user['banner'] = user['banner'].url if user['banner'] else ''
+            return JsonResponse(user)
+        except Exception:
+            return render(request, '404.html', status=404)
     # edit user
     elif request.method == "POST":
         # make sure that the user_id input isnt being manipulated, only allow editing your own user.

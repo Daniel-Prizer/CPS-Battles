@@ -161,7 +161,7 @@ AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
 try:
     from decouple import config # type: ignore
     SECRET_KEY = config('SECRET_KEY')
-    DEBUG = "False"
+    DEBUG = True
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
