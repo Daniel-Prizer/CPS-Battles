@@ -26,12 +26,10 @@ document.addEventListener("DOMContentLoaded", function () {
         `);
     });
 
-        // parse flag emojis after 1secs
-    setTimeout(function() {
-        twemoji.parse(document.getElementById("leaderboard_list"), {
-            folder: 'svg',
-            ext: '.svg',
-            base: '/static/twemoji/',
-        });
-    }, 1000);
+    // parse flag emojis
+    twemoji.parse(document.getElementById("leaderboard_list"), {
+        folder: 'svg',
+        ext: '.svg',
+        base: '/static/twemoji/',
+    });
 });

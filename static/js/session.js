@@ -178,6 +178,8 @@ const change_tutorial = (title_input, value_input) => {
 
 
 // check for joined players, send and receive game state on an interval:
+pfp1set = false
+pfp2set = false
 setInterval(() => {
     // eslint-disable-next-line no-undef
     fetch(`/api/games/${game_id}/`)
@@ -192,11 +194,16 @@ setInterval(() => {
                 player1 = data2
                 let player1_text = document.getElementById("player1_text")
                 player1_text.innerText = player1.username+" "+player1.flag_emoji+" 👑"
-                let pfp = default_pfp;
-                if (player1.avatar != "") {
-                    pfp = player1.avatar.startsWith('/media/') ? player1.avatar : '/media/' + player1.avatar;
-                }
+                // if we already generated a mini-pfp dont add another one (this was a problem on slower connections)
+                if (!pfp1set) {
+                    pfp1set = true
+                    let pfp = default_pfp;
+                    // if the user has an avatar, then set pfp as the avatar
+                    if (player1.avatar != "" && player1.avatar != undefined) {
+                        pfp = player1.avatar
+                };
                 document.getElementById("player1_user_span").insertAdjacentHTML("afterbegin", `<img class="mini_pfp" src="${pfp}" alt="profile picture">`);
+                }
                 // eslint-disable-next-line no-undef
                 twemoji.parse(document.getElementById("player1_text"), {
                     folder: 'svg',
@@ -214,12 +221,16 @@ setInterval(() => {
                 player2 = data3
                 let player2_text = document.getElementById("player2_text")
                 player2_text.innerText = player2.username+" "+player2.flag_emoji
-                let pfp = default_pfp;
-                if (player2.avatar != "") {
-                    pfp = player2.avatar.startsWith('/media/') ? player2.avatar : '/media/' + player2.avatar;
+                if (!pfp2set) {
+                    pfp2set = true
+                    let pfp = default_pfp;
+                    if (player2.avatar != "" && player2.avatar != undefined) {
+                        pfp = player2.avatar
+                        
+                    };
+                    document.getElementById("player2_user_span").insertAdjacentHTML("afterbegin", `<img class="mini_pfp" src="${pfp}" alt="profile picture">`);
                 }
-                document.getElementById("player2_user_span").insertAdjacentHTML("afterbegin", `<img class="mini_pfp" src="${pfp}" alt="profile picture">`);
-                // eslint-disable-next-line no-undef
+              // eslint-disable-next-line no-undef
                 twemoji.parse(document.getElementById("player2_text"), {
                     folder: 'svg',
                     ext: '.svg',
@@ -301,4 +312,4 @@ setInterval(() => {
         send_tutorial_to_player2 = false
     }
 
-}, 1000);
+}, 3000);

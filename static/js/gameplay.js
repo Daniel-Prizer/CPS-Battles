@@ -147,7 +147,7 @@ const set_timers = () => {
         });
         // check if anyone won yet
         check_and_set_win_state()
-    }, 500);
+    }, 2000);
 }
 
 
@@ -156,7 +156,17 @@ const check_and_set_win_state = () => {
     fetch(`/api/games/${game_id}/`)
         .then(response => response.json())
         .then(data => {
-            // if there is a winning player, and it is the current playerÞ
+
+            /* // if there is a winning player, set their click count and bar to max (to try and negate sync issues)
+            if (data.winning_player == data.player1 && mode_type == "first to") {
+                document.getElementById("player_one_progress_div").style.height = "0%"
+                document.getElementById("player_one_clicks").textContent = mode_value
+            } else if (data.winning_player == data.player2 && mode_type == "first to") {
+                document.getElementById("player_two_progress_div").style.height = "0%"
+                document.getElementById("player_two_clicks").textContent = mode_value
+            } */
+
+            // if there is a winning player, and it is the current player
             if (data.winning_player == user_id) {
                 // stop any further game updates
                 clearInterval(game_refresh_interval)
