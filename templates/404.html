@@ -4,17 +4,9 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-
-    {% if user.is_authenticated %}
-    <div id="login_box" class="main_box_background">
-        <p>You are already logged in.</p>
-    </div>
-    {% else %}
     <div id="login_box" class="main_box_background">
         <h1 id="login_text" class="title">404</h1>
         <p class="medium">The requested resource was not found.</p>
         <button class="header_button" id="popup_confirm_button" onclick="window.location.href='/'">Confirm</button>
     </div>
-    {% endif %}
-
 {% endblock %}
