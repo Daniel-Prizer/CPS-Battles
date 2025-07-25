@@ -14,6 +14,7 @@ python manage.py migrate<br/>
 
 
 ## Web App Showcase
+[CPSBattles Website](https://cpsbattles.azurewebsites.net/) Active as of 2025
 If I am not currently hosting the website or you don't want to set it up yourself,<br/>
 please have a look at what it is supposed to look like:<br/>
 
@@ -43,4 +44,4 @@ Click on any username to see their profile and game history.<br/>
 ![Leaderboards video](Readme%20gifs/Leaderboards%20gif.gif)
 
 ## Project Report
-Please have a read over 'CPS_Battles - Project Report.docx' if you are interested in the development process! :)
+Please have a read over 'CPS_Battles - Project Report.pdf' if you are interested in the development process! :)

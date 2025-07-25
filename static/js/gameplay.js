@@ -352,7 +352,6 @@ const initialize_game = () => {
             .then(data => {
                 let player1 = data
                 document.getElementById("player_one_name").innerText = player1.username+" "+player1.flag_emoji
-                // eslint-disable-next-line no-undef
                 twemoji.parse(document.getElementById("player_one_name"), {
                     folder: 'svg',
                     ext: '.svg',
@@ -364,7 +363,6 @@ const initialize_game = () => {
             .then(data => {
                 let player2 = data
                 document.getElementById("player_two_name").innerText = player2.username+" "+player2.flag_emoji
-                // eslint-disable-next-line no-undef
                 twemoji.parse(document.getElementById("player_two_name"), {
                     folder: 'svg',
                     ext: '.svg',

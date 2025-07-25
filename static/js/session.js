@@ -38,7 +38,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     // set start game button onclick function
     document.getElementById("start_game").onclick = () => {
         // update db, set the current game to started
-        // eslint-disable-next-line no-undef
         fetch(`/api/games/${game_id}/`, {
             method: 'POST',
             headers: {
@@ -181,7 +180,7 @@ const change_tutorial = (title_input, value_input) => {
 pfp1set = false
 pfp2set = false
 setInterval(() => {
-    // eslint-disable-next-line no-undef
+
     fetch(`/api/games/${game_id}/`)
     .then(response1 => response1.json())
     .then(data1 => {
@@ -204,7 +203,6 @@ setInterval(() => {
                 };
                 document.getElementById("player1_user_span").insertAdjacentHTML("afterbegin", `<img class="mini_pfp" src="${pfp}" alt="profile picture">`);
                 }
-                // eslint-disable-next-line no-undef
                 twemoji.parse(document.getElementById("player1_text"), {
                     folder: 'svg',
                     ext: '.svg',
@@ -230,7 +228,7 @@ setInterval(() => {
                     };
                     document.getElementById("player2_user_span").insertAdjacentHTML("afterbegin", `<img class="mini_pfp" src="${pfp}" alt="profile picture">`);
                 }
-              // eslint-disable-next-line no-undef
+
                 twemoji.parse(document.getElementById("player2_text"), {
                     folder: 'svg',
                     ext: '.svg',
@@ -242,7 +240,7 @@ setInterval(() => {
         // if we have a local player2 set
         if (player2) {
             // if the current user is player2
-            // eslint-disable-next-line no-undef
+
             if (user_id == player2.id) {
                 // disable all interactivity with gamemode selection and start button
                 document.getElementById("gamemode_select").disabled = true
@@ -281,7 +279,6 @@ setInterval(() => {
             }
         }
         // if player1 and player2 are set and the current user is player1
-        // eslint-disable-next-line no-undef
         if ((player1 && player2) && user_id == player1.id) {
             // enable the start button
             document.getElementById("start_game").disabled = false;
@@ -289,7 +286,6 @@ setInterval(() => {
 
         if (data1.started) {
             // if the game is set as started, redirect
-            // eslint-disable-next-line no-undef
             window.location.href = `/games/${game_id}/play`
         }
 

@@ -37,9 +37,12 @@ AUTH_USER_MODEL = 'users.Users'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
-
+if os.environ.get("DEBUG") == "True":
+    DEBUG = True
+else:
+    DEBUG = False
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG")
+
 
 ALLOWED_HOSTS = ['cpsbattles.azurewebsites.net','localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = ['https://cpsbattles.azurewebsites.net']
@@ -158,7 +161,7 @@ AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
 try:
     from decouple import config # type: ignore
     SECRET_KEY = config('SECRET_KEY')
-    DEBUG = config('DEBUG')
+    DEBUG = "False"
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -173,6 +176,7 @@ try:
         }
     }
     AZURE_ACCOUNT_KEY = config('STORAGE_KEY')
+    
     print("Local environment detected, proceeding with local settings.py")
     
 except Exception:
