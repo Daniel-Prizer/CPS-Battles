@@ -2,9 +2,10 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.utils.timezone import now
 from .models import Games
 from DataLayer.API import DataLayerAPI
-from django.http import JsonResponse
 import json
 
 
@@ -88,3 +89,9 @@ def join_game(request, game_id):
         return render(request, 'games/gameplay.html', {"game_id": game_id})
 
     return render(request, 'games/session.html', {"game_id": game_id})
+
+
+def server_time(request):
+    return JsonResponse({
+        "server_time": now().isoformat()
+    })

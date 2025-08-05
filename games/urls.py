@@ -9,4 +9,5 @@ urlpatterns = [
     # RESTful API endpoints
     path('api/games/<uuid:game_id>/', views.game_detail_api, name='game_detail_api'),  # GET, POST (edit)
     path('api/games/', views.games_for_user_api, name='games_for_user_api'),  # GET with ?user_id=
+    path('api/server-time/', views.server_time, name='server_time'),
 ]

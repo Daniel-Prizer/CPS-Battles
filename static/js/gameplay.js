@@ -4,6 +4,7 @@
 let game_base_state;
 let mode_type;
 let mode_value;
+let time_offset = 0;
 
 // real-time game details
 let clicks_remaining = 0
@@ -336,6 +337,66 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+function start_countdown() {
+    const countdown_timer = setInterval(() => {
+        // if no local start time exists:
+        if (start_time == undefined || start_time == null) {
+            fetch(`/api/games/${game_id}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.timestamp) {
+                    // attempt to get the start time from the database
+                    start_time = new Date(data.timestamp);
+                } else { // if it doesnt exist do:
+                    // player 1 sets the timestamp/start_time
+                    if ((start_time == undefined || start_time == null) && user_id == game_base_state.player_one) {
+                        const server_now = Date.now() + time_offset;
+                        const nine_seconds_later = new Date(server_now + 9000); // set the start time 9 seconds from now
+
+                        fetch(`/api/games/${game_id}/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            body: JSON.stringify({
+                                edit_field: 'timestamp',
+                                edit_replacement: nine_seconds_later.toISOString() // send in ISO format
+                            })
+                        });
+                    }
+                }
+            });
+        }
+
+        // if a local start time exists
+        if (start_time)  {
+            // write the countdown on the button
+            const now = Date.now() + time_offset;
+            button_unlock_timer = -Math.trunc((now - start_time.getTime()) / 1000);
+            console.log(button_unlock_timer, start_time, now)
+            document.getElementById("button_unlock_timer").textContent = button_unlock_timer + "...";
+        }
+
+        // if the countdown is over:
+        if (button_unlock_timer <= 0) {
+            // enable the cps button and write the correct text on the button.
+            document.getElementsByClassName("cps_button")[0].disabled = false;
+            document.getElementsByClassName("cps_button")[0].textContent = "Click me!";
+            // clear the countdown timer
+            clearInterval(countdown_timer);
+            // set the remaining time left for the game based on the start_time
+            const now = Date.now() + time_offset;
+            secs_remaining = secs_remaining - Math.trunc((now - start_time.getTime()) / 1000);
+            // set the game timers
+            set_timers();
+        }
+    }, 250);
+}
+
+
+
+
 const initialize_game = () => {
     // change the DOM based on the game mode
     if (mode_type == "first to") {
@@ -370,60 +431,15 @@ const initialize_game = () => {
             });
     
 
-    // start the countdown timer
-    const countdown_timer = setInterval(() => {
-        // if no local start time exists:
-        if (start_time == undefined || start_time == null) {
-            fetch(`/api/games/${game_id}/`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.timestamp) {
-                    // attempt to get the start time from the database
-                    start_time = new Date(data.timestamp);
-                } else { // if it doesnt exist do:
-                    // player 1 sets the timestamp/start_time
-                    if ((start_time == undefined || start_time == null) && user_id == game_base_state.player_one) {
-                        fetch(`/api/games/${game_id}/`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRFToken': getCookie('csrftoken')
-                            },
-                            body: JSON.stringify({
-                                edit_field: 'timestamp',
-                                edit_replacement: new Date(Date.now() + 6000) // set the start time 6 seconds from now
-                            })
-                        })
-                    }
-                }
-                
-            });
-        }
-        
-        // if a local start time exists
-        if (start_time)  {
-            // write the countdown on the button
-            button_unlock_timer = -Math.trunc((Date.now()-start_time) / 1000);
-            document.getElementById("button_unlock_timer").textContent = button_unlock_timer+"..."
-        }
-
-        // if the countdown is over:
-        if (button_unlock_timer <= 0) {
-            // enable the cps button and write the correct text on the button.
-            document.getElementsByClassName("cps_button")[0].disabled = false
-            document.getElementsByClassName("cps_button")[0].textContent = "Click me!"
-            // clear the countdown timer
-            clearInterval(countdown_timer)
-            // set the remaining time left for the game based on the start_time
-            secs_remaining = secs_remaining - Math.trunc((Date.now()-start_time) / 1000)
-            // set the game timers
-            set_timers()
-        }
-
-        
-    }, 250);
-
-
+    fetch("/api/server-time/")
+    .then(res => res.json())
+    .then(data => {
+        const serverTime = new Date(data.server_time).getTime();
+        const clientTime = Date.now();
+        time_offset = serverTime - clientTime;
+        // Start the countdown
+        start_countdown();
+    });
 }
 
 
