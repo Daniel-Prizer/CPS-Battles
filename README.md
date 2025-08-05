@@ -1,17 +1,4 @@
 <img src="static/images/cps_battles.png" alt="CPS Battles Logo" width="450"/>
-This project requires pip packages listed in requirements.txt,<br/>
-please use pip to install them: pip install -r requirements.txt<br/>
-^^ It is recommended that you use a python virtual environment.<br/>
-If you are missing pip, please follow the instructions here: https://pip.pypa.io/en/stable/installation/<br/>
-<br/>
-Folders with large amounts of images are gitignored to not consume cloud space,<br/>
-thus to get flag emojis to work (you may not need to do this, i reenabled the twemoji images for the azure server I am using during a certain period), please download the svg folder from: https://github.com/twitter/twemoji/tree/master/assets<br/>
-and place it here: .../static/twemoji/svg<br/>
-<br/>
-The project uses a postgres database to run, please create one and configure CPS_Battles/settings.py properly.<br/>
-Then to set the database up:
-python manage.py migrate<br/>
-
 
 ## Web App Showcase
 [CPSBattles Website](https://cpsbattles.azurewebsites.net/) Active as of 2025
@@ -45,3 +32,19 @@ Click on any username to see their profile and game history.<br/>
 
 ## Project Report
 Please have a read over 'CPS_Battles - Project Report.pdf' if you are interested in the development process! :)
+
+## Local Installation Guide
+This project requires pip packages listed in requirements.txt,<br/>
+please use pip to install them: pip install -r requirements.txt<br/>
+^^ It is recommended that you use a python virtual environment.<br/>
+If you are missing pip, please follow the instructions here: https://pip.pypa.io/en/stable/installation/<br/>
+<br/>
+Folders with large amounts of images are gitignored to not consume cloud space,<br/>
+thus to get flag emojis to work (you may not need to do this, i reenabled the twemoji images for the azure server I am using during a certain period), please download the svg folder from: https://github.com/twitter/twemoji/tree/master/assets<br/>
+and place it here: .../static/twemoji/svg<br/>
+<br/>
+The project uses a postgres database to run, please create one and configure CPS_Battles/settings.py properly.<br/>
+Then to set the database up:
+python manage.py migrate<br/>
+
+settings.py is in your hands. Please configure it correctly based on your use case.
