@@ -184,6 +184,15 @@ setInterval(() => {
     fetch(`/api/games/${game_id}/`)
     .then(response1 => response1.json())
     .then(data1 => {
+
+        // enable gamemode change if current user is player one
+        if (data1.player_one == user_id) {     
+            document.getElementById("gamemode_select").disabled = false
+            document.getElementById("value_select").disabled = false
+            document.getElementById("gamemode_value_div").style.display = "block"
+        }
+
+
         // if the db has a player_one but we dont have one locally
         if (data1.player_one && !(player1)) {
             fetch(`/api/users/${data1.player_one}/`)
@@ -240,12 +249,7 @@ setInterval(() => {
         // if we have a local player2 set
         if (player2) {
             // if the current user is player2
-
             if (user_id == player2.id) {
-                // disable all interactivity with gamemode selection and start button
-                document.getElementById("gamemode_select").disabled = true
-                document.getElementById("value_select").disabled = true
-                document.getElementById("gamemode_value_div").style.display = "none"
                 // parse the gamemode from the db and set the tutorial accordingly
                 if (data1.mode.slice(0,8).toLowerCase() == 'first to') {
                     //"50", "75", "100", "125", "150"

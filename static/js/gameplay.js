@@ -43,7 +43,8 @@ const set_timers = () => {
             secs_remaining--
             document.getElementById("time_remaining").textContent = secs_remaining
         } else { // if 0 seconds remaining
-
+            // show loading screen for who won
+            document.getElementsByClassName("overlay")[0].style.display = "flex"
         }
         if (counter > 1) { // update click speed
             cps = ((counter / (new Date().getTime()-firstClick))*1000)
@@ -166,11 +167,14 @@ const check_and_set_win_state = () => {
                 document.getElementById("player_two_clicks").textContent = mode_value
             } */
 
+            // -- SET WINNER OVERLAY DIALOGUE IF A WINNER EXISTS IN DB --
             // if there is a winning player, and it is the current player
-            if (data.winning_player == user_id) {
+            if (data.winning_player == user_id && data.winning_player) {
                 // stop any further game updates
                 clearInterval(game_refresh_interval)
                 // player won html box
+                document.getElementById("win_status").textContent = "You won!"
+                document.getElementById("popup_confirm_button").disabled = false
                 document.getElementsByClassName("overlay")[0].style.display = "flex"
             }
             // if there is a winning player, and it is NOT the current player
@@ -179,18 +183,47 @@ const check_and_set_win_state = () => {
                 clearInterval(game_refresh_interval)
                 // player lost html box
                 document.getElementById("win_status").textContent = "You lost."
+                document.getElementById("popup_confirm_button").disabled = false
                 document.getElementsByClassName("overlay")[0].style.display = "flex"
             }
-            // Otherwise, if there is no winning player and there is no time remaining:
-            else if (secs_remaining == 0) {
-                if (mode_type == "first to") {
-                    // if player 1 had more clicks
+            // -- THERE IS NO WINNER IN DB, CHECK IF CURRENT USER MEETS REQUIREMENTS TO WIN --
+            // else if there is no winning player and the game is still ongoing + only allow player1 (host) to edit game
+            else if ((!data.winning_player && secs_remaining > 0) && data.player_one == user_id) {
+                if(mode_type == "first to") {
+                    // if player one has maxed his clicks, set him as the winner
+                    if (data.player_one_clicks >= mode_value) {
+                        fetch(`/api/games/${game_id}/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            body: JSON.stringify({
+                                edit_field: 'winning_player',
+                                edit_replacement: data.player_one
+                            })
+                        })
+                        // if player two has maxed his clicks, set him as the winner
+                    } else if (data.player_two_clicks >= mode_value) {
+                        fetch(`/api/games/${game_id}/`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },
+                            body: JSON.stringify({
+                                edit_field: 'winning_player',
+                                edit_replacement: data.player_two
+                            })
+                        })
+                    }
+                } // THERE IS NO CHECK FOR BEST TOP SPEED CUS THAT IS DONE ONCE TIMER IS OVER, THIS IS WHEN SECS_REMAINING > 0
+                
+                // there is no winning player, yet the game has finished. player one edits the game to find winner:
+            } else if ((!data.winning_player && secs_remaining <= 0) && data.player_one == user_id) {
+                if(mode_type == "first to") {
+                    // if player one has higher clicks, set him as winner.
                     if (data.player_one_clicks > data.player_two_clicks) {
-                        // if the current user is player 1, show win msg and update game data
-                        if (data.player_one != user_id) {
-                            document.getElementById("win_status").textContent = "You lost."
-                        }
-                        document.getElementsByClassName("overlay")[0].style.display = "flex"
                         fetch(`/api/games/${game_id}/`, {
                             method: 'POST',
                             headers: {
@@ -202,14 +235,7 @@ const check_and_set_win_state = () => {
                                 edit_replacement: data.player_one
                             })
                         })
-                    } else { // (player 1 lost):
-                        // if the current user is player 1 (the loser)
-                        if (data.player_two != user_id) {
-                            // show loss msg
-                            document.getElementById("win_status").textContent = "You lost."
-                        }
-                        document.getElementsByClassName("overlay")[0].style.display = "flex"
-                        // update win status in db
+                    } else {  //else set player2 as winner.
                         fetch(`/api/games/${game_id}/`, {
                             method: 'POST',
                             headers: {
@@ -222,16 +248,9 @@ const check_and_set_win_state = () => {
                             })
                         })
                     }
-                    // game is finished so end all game refreshes.
-                    clearInterval(game_refresh_interval)
-                } else if (mode_type == "best top speed") {
-                    // if the mode is best top speed do the same as before but compare cps instead of clicks. 
-                    // please refer to the comments above
+                } else { // mode is top speed so we check cps instead of clicks
+                    // if player one has higher cps, set him as winner.
                     if (data.player_one_cps > data.player_two_cps) {
-                        if (data.player_one != user_id) {
-                            document.getElementById("win_status").textContent = "You lost."
-                        }
-                        document.getElementsByClassName("overlay")[0].style.display = "flex"
                         fetch(`/api/games/${game_id}/`, {
                             method: 'POST',
                             headers: {
@@ -243,11 +262,7 @@ const check_and_set_win_state = () => {
                                 edit_replacement: data.player_one
                             })
                         })
-                    } else {
-                        if (data.player_two != user_id) {
-                            document.getElementById("win_status").textContent = "You lost."
-                        }
-                        document.getElementsByClassName("overlay")[0].style.display = "flex"
+                    } else {  //else set player2 as winner.
                         fetch(`/api/games/${game_id}/`, {
                             method: 'POST',
                             headers: {
@@ -260,23 +275,7 @@ const check_and_set_win_state = () => {
                             })
                         })
                     }
-                    clearInterval(game_refresh_interval)
                 }
-            }
-            // if the mode is first to and current user reaches 0 clicks remaining, register them as the winner in db
-            else if (mode_type == "first to" && clicks_remaining < 1) {
-                document.getElementsByClassName("overlay")[0].style.display = "flex"
-                    fetch(`/api/games/${game_id}/`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': getCookie('csrftoken')
-                        },
-                        body: JSON.stringify({
-                            edit_field: 'winning_player',
-                            edit_replacement: "current_user"
-                        })
-                    })
             }
         });
 }
@@ -436,6 +435,9 @@ const click = () => {
     // remove from the click remaining variable
     if (clicks_remaining > 0) {
         clicks_remaining--
+    } else if (!(mode_type == 'best top speed')) {
+        // show loading screen for who on
+        document.getElementsByClassName("overlay")[0].style.display = "flex"
     }
     // check if someone has won yet
     check_and_set_win_state()

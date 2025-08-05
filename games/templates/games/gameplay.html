@@ -7,8 +7,8 @@
 
     <div class="overlay">
         <div class="popup" >
-            <p id="win_status">You won!</p>
-            <button class="header_button" id="popup_confirm_button">Confirm</button>
+            <p id="win_status">Loading...</p>
+            <button class="header_button" id="popup_confirm_button" disabled>Confirm</button>
         </div>   
     </div>
 
@@ -52,6 +52,7 @@
 {% block scripts %}
 <script>
     const game_id = "{{ game_id }}";
+    const leader = "{{ leader }}";
 </script>
 
 <script src="{% static 'js/gameplay.js' %}"></script>
