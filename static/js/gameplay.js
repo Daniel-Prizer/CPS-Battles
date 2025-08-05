@@ -374,7 +374,6 @@ function start_countdown() {
             // write the countdown on the button
             const now = Date.now() + time_offset;
             button_unlock_timer = -Math.trunc((now - start_time.getTime()) / 1000);
-            console.log(button_unlock_timer, start_time, now)
             document.getElementById("button_unlock_timer").textContent = button_unlock_timer + "...";
         }
 
@@ -412,6 +411,7 @@ const initialize_game = () => {
             .then(data => {
                 let player1 = data
                 document.getElementById("player_one_name").innerText = player1.username+" "+player1.flag_emoji
+                document.getElementById("player_one_pfp").src = player1.avatar
                 twemoji.parse(document.getElementById("player_one_name"), {
                     folder: 'svg',
                     ext: '.svg',
@@ -423,6 +423,7 @@ const initialize_game = () => {
             .then(data => {
                 let player2 = data
                 document.getElementById("player_two_name").innerText = player2.username+" "+player2.flag_emoji
+                document.getElementById("player_two_pfp").src = player2.avatar
                 twemoji.parse(document.getElementById("player_two_name"), {
                     folder: 'svg',
                     ext: '.svg',
