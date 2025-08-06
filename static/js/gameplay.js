@@ -411,7 +411,9 @@ const initialize_game = () => {
             .then(data => {
                 let player1 = data
                 document.getElementById("player_one_name").innerText = player1.username+" "+player1.flag_emoji
-                document.getElementById("player_one_pfp").src = player1.avatar
+                if (player1.avatar) {
+                    document.getElementById("player_one_pfp").src = player1.avatar
+                }
                 twemoji.parse(document.getElementById("player_one_name"), {
                     folder: 'svg',
                     ext: '.svg',
@@ -423,7 +425,9 @@ const initialize_game = () => {
             .then(data => {
                 let player2 = data
                 document.getElementById("player_two_name").innerText = player2.username+" "+player2.flag_emoji
-                document.getElementById("player_two_pfp").src = player2.avatar
+                if (player2.avatar) {
+                    document.getElementById("player_two_pfp").src = player2.avatar
+                }
                 twemoji.parse(document.getElementById("player_two_name"), {
                     folder: 'svg',
                     ext: '.svg',

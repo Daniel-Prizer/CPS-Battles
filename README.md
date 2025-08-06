@@ -1,7 +1,8 @@
 <img src="static/images/cps_battles.png" alt="CPS Battles Logo" width="450"/>
 
 ## Web App Showcase
-[CPSBattles Website](https://cpsbattles.azurewebsites.net/) Active as of 2025
+[CPSBattles Website](https://cpsbattles.azurewebsites.net/)
+^ Could be dysfunctional or offline depending on when you read this.<br/>
 If I am not currently hosting the website or you don't want to set it up yourself,<br/>
 please have a look at what it is supposed to look like:<br/>
 
@@ -10,7 +11,6 @@ Click the big button to test your speed, <br/>
 the record at the bottom will save your highest speed across the whole website as long as you are logged in!<br/>
 ![Homepage video](Readme%20gifs/Homepage%20gif.gif)
 
-
 ##### Game
 To join a lobby, click the "Play with friends" button on the homepage.<br/>
 Then share the link with your friend and select your game mode. When ready press start!<br/>
@@ -18,12 +18,10 @@ Then share the link with your friend and select your game mode. When ready press
 Wait for the countdown and start clicking!<br/>
 ![Gameplay video](Readme%20gifs/Gameplay%20gif.gif)
 
-
 ##### Profile
 On your profile you can add an avatar, banner and bio to your liking. <br/>
 You can also see your game history at the bottom.<br/>
 ![Profile view video](Readme%20gifs/Profile%20gif.gif)
-
 
 ##### Leaderboards
 On the leaderboard you can see which players have clicked the fastest.<br/>
